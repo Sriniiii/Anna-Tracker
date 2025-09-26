@@ -1,0 +1,151 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { Search, User, UserPlus, Edit, Trash2 } from 'lucide-react';
+import { useToast } from '../hooks/useToast';
+import Toast from '../components/UI/Toast';
+import { supabase } from '../lib/supabaseClient';
+import { Profile } from '../types/database';
+import { format } from 'date-fns';
+
+const UserManagement: React.FC = () => {
+  const { toast, showToast, hideToast } = useToast();
+  const [users, setUsers] = useState<Profile[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [roleFilter, setRoleFilter] = useState('all');
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .order('full_name', { ascending: true });
+
+      if (error) {
+        console.error('Error fetching users:', error);
+        showToast('error', 'Fetch Failed', 'Could not fetch user data.');
+      } else {
+        setUsers(data || []);
+      }
+      setLoading(false);
+    };
+
+    fetchUsers();
+  }, [showToast]);
+
+  const filteredUsers = useMemo(() => {
+    return users.filter(user => {
+      const matchesSearch = user.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           user.email?.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesRole = roleFilter === 'all' || user.role === roleFilter;
+      return matchesSearch && matchesRole;
+    });
+  }, [users, searchQuery, roleFilter]);
+
+  const handleAction = (action: string, userName: string | null) => {
+    showToast('info', `${action} User`, `Functionality to ${action.toLowerCase()} user ${userName} is coming soon.`);
+  };
+
+  const RoleBadge: React.FC<{ role: 'admin' | 'user' }> = ({ role }) => {
+    const isAdmin = role === 'admin';
+    return (
+      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+        isAdmin ? 'bg-primary-100 text-primary-800' : 'bg-gray-100 text-gray-800'
+      }`}>
+        {isAdmin ? 'Admin' : 'User'}
+      </span>
+    );
+  };
+
+  return (
+    <>
+      <div className="space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">User Management</h1>
+            <p className="text-gray-600">View, edit, and manage all users in the system.</p>
+          </div>
+          <button onClick={() => handleAction('Add', '')} className="btn-primary flex items-center gap-2 w-full md:w-auto">
+            <UserPlus className="h-4 w-4" />
+            Add User
+          </button>
+        </div>
+
+        <div className="card">
+          <div className="flex flex-col md:flex-row gap-4 mb-4">
+            <div className="relative flex-grow">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search users by name or email..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="input pl-10 w-full"
+              />
+            </div>
+            <select
+              value={roleFilter}
+              onChange={(e) => setRoleFilter(e.target.value)}
+              className="input w-full md:w-48"
+            >
+              <option value="all">All Roles</option>
+              <option value="admin">Admin</option>
+              <option value="user">User</option>
+            </select>
+          </div>
+
+          {loading ? (
+            <div className="text-center py-8">
+              <div className="h-12 w-12 mx-auto animate-spin rounded-full border-4 border-primary-500 border-t-transparent"></div>
+              <p className="mt-4 text-gray-500">Loading users...</p>
+            </div>
+          ) : filteredUsers.length === 0 ? (
+            <div className="text-center py-12">
+              <User className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No users found</h3>
+              <p className="text-gray-600">No users match your current search and filter criteria.</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined Date</th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredUsers.map((user) => (
+                    <tr key={user.id}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-3">
+                          <img className="h-10 w-10 rounded-full" src={user.avatar_url || `https://ui-avatars.com/api/?name=${user.full_name || user.email}&background=random`} alt={user.full_name || ''} />
+                          <div className="text-sm font-medium text-gray-900">{user.full_name || 'N/A'}</div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.email}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <RoleBadge role={user.role} />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{format(new Date(user.updated_at), 'MMM dd, yyyy')}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button onClick={() => handleAction('Edit', user.full_name)} className="text-primary-600 hover:text-primary-900 mr-4"><Edit className="h-4 w-4" /></button>
+                        <button onClick={() => handleAction('Delete', user.full_name)} className="text-red-600 hover:text-red-900"><Trash2 className="h-4 w-4" /></button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+      <Toast {...toast} onClose={hideToast} />
+    </>
+  );
+};
+
+export default UserManagement;
