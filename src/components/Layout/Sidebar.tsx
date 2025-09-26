@@ -19,26 +19,25 @@ const navigation = [
   { name: 'Analytics', href: '/analytics', icon: BarChart3, admin: false },
   { name: 'Marketplace', href: '/marketplace', icon: ShoppingCart, admin: false },
   { name: 'User Management', href: '/user-management', icon: Users, admin: true },
-  { name: 'Settings', href: '/settings', icon: Settings, admin: false },
 ];
 
 const Sidebar: React.FC = () => {
   const { profile } = useAuth();
 
   return (
-    <div className="flex w-64 flex-col bg-white shadow-medium">
+    <div className="flex w-64 flex-col bg-white border-r border-neutral-200/80">
       <div className="flex items-center gap-3 p-6">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600">
           <Leaf className="h-6 w-6 text-white" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-gray-900">BiteWise</h1>
-          <p className="text-sm text-gray-500">Food Waste Manager</p>
+          <h1 className="text-xl font-bold text-neutral-900">BiteWise</h1>
         </div>
       </div>
       
       <nav className="flex-1 px-4 pb-4">
-        <ul className="space-y-2">
+        <p className="px-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Menu</p>
+        <ul className="space-y-1">
           {navigation.map((item) => {
             if (item.admin && profile?.role !== 'admin') {
               return null;
@@ -48,10 +47,10 @@ const Sidebar: React.FC = () => {
                 <NavLink
                   to={item.href}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                    `flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                       isActive
-                        ? 'bg-primary-50 text-primary-700'
-                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                        ? 'bg-primary-50 text-primary-600'
+                        : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900'
                     }`
                   }
                 >
@@ -63,6 +62,27 @@ const Sidebar: React.FC = () => {
           })}
         </ul>
       </nav>
+
+      <div className="mt-auto p-4">
+        <p className="px-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Account</p>
+        <ul className="space-y-1">
+          <li>
+            <NavLink
+              to="/settings"
+              className={({ isActive }) =>
+                `flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'bg-primary-50 text-primary-600'
+                    : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900'
+                }`
+              }
+            >
+              <Settings className="h-5 w-5" />
+              Settings
+            </NavLink>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };

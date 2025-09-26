@@ -7,28 +7,30 @@ interface StatCardProps {
   change: string;
   trend: 'up' | 'down';
   icon: LucideIcon;
-  color: 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'error';
+  color: 'blue' | 'purple' | 'teal' | 'green' | 'yellow' | 'red';
 }
 
 const colorClasses = {
-  primary: 'bg-primary-500',
-  secondary: 'bg-secondary-500',
-  accent: 'bg-accent-500',
-  success: 'bg-success-500',
-  warning: 'bg-warning-500',
-  error: 'bg-error-500',
+  blue: { bg: 'bg-blue-100', text: 'text-blue-600' },
+  purple: { bg: 'bg-purple-100', text: 'text-purple-600' },
+  teal: { bg: 'bg-teal-100', text: 'text-teal-600' },
+  green: { bg: 'bg-green-100', text: 'text-green-600' },
+  yellow: { bg: 'bg-yellow-100', text: 'text-yellow-600' },
+  red: { bg: 'bg-red-100', text: 'text-red-600' },
 };
 
 const StatCard: React.FC<StatCardProps> = ({ title, value, change, trend, icon: Icon, color }) => {
+  const { bg, text } = colorClasses[color];
+
   return (
     <div className="card">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
+          <p className="text-sm font-medium text-neutral-600">{title}</p>
+          <p className="text-2xl font-bold text-neutral-900">{value}</p>
         </div>
-        <div className={`rounded-lg p-3 ${colorClasses[color]}`}>
-          <Icon className="h-6 w-6 text-white" />
+        <div className={`rounded-md p-3 ${bg}`}>
+          <Icon className={`h-6 w-6 ${text}`} />
         </div>
       </div>
       <div className="mt-4 flex items-center gap-2">
@@ -37,10 +39,10 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, change, trend, icon: 
         ) : (
           <TrendingDown className="h-4 w-4 text-error-500" />
         )}
-        <span className={`text-sm font-medium ${trend === 'up' ? 'text-success-500' : 'text-error-500'}`}>
+        <span className={`text-sm font-medium ${trend === 'up' ? 'text-success-600' : 'text-error-600'}`}>
           {change}
         </span>
-        <span className="text-sm text-gray-500">from last month</span>
+        <span className="text-sm text-neutral-500">from last month</span>
       </div>
     </div>
   );

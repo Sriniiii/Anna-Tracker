@@ -4,17 +4,16 @@ import { DollarSign, Trash2, Leaf, ShoppingCart, CheckCircle, BarChart3 } from '
 import StatCard from '../components/Dashboard/StatCard';
 import WasteChart from '../components/Dashboard/WasteChart';
 import RecentActivity from '../components/Dashboard/RecentActivity';
-import QuickActions from '../components/Dashboard/QuickActions';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabaseClient';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
   const [stats, setStats] = useState([
-    { title: 'Total Savings', value: '$0', change: '+0%', trend: 'up' as const, icon: DollarSign, color: 'primary' as const },
-    { title: 'Waste Diverted', value: '0 lbs', change: '+0%', trend: 'up' as const, icon: Trash2, color: 'success' as const },
-    { title: 'CO2 Emission Reduced', value: '0 lbs', change: '+0%', trend: 'up' as const, icon: Leaf, color: 'accent' as const },
-    { title: 'Active Listings', value: '0', change: '+0%', trend: 'up' as const, icon: ShoppingCart, color: 'secondary' as const },
+    { title: 'Total Savings', value: '$0', change: '+0%', trend: 'up' as const, icon: DollarSign, color: 'blue' as const },
+    { title: 'Waste Diverted', value: '0 lbs', change: '+0%', trend: 'up' as const, icon: Trash2, color: 'green' as const },
+    { title: 'CO2 Reduced', value: '0 lbs', change: '+0%', trend: 'up' as const, icon: Leaf, color: 'teal' as const },
+    { title: 'Active Listings', value: '0', change: '+0%', trend: 'up' as const, icon: ShoppingCart, color: 'purple' as const },
   ]);
   const [wasteByCategory, setWasteByCategory] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,19 +31,11 @@ const Dashboard: React.FC = () => {
           supabase.from('waste_logs').select('category, quantity'),
         ]);
 
-        // Calculate Total Savings
         const totalSavings = savingsData.data?.reduce((acc, item) => acc + (item.original_price - item.discounted_price), 0) || 0;
-        
-        // Calculate Waste Diverted
         const totalWasteDiverted = wasteData.data?.reduce((acc, item) => acc + item.quantity, 0) || 0;
-
-        // Calculate CO2 Reduction (approx. 2.5 lbs CO2 per lb of food waste)
         const co2Reduced = totalWasteDiverted * 2.5;
-
-        // Get Active Listings count
         const activeListings = listingsData.count || 0;
 
-        // Calculate Waste by Category
         const categoryMap: { [key: string]: number } = {};
         categoryData.data?.forEach(item => {
           categoryMap[item.category] = (categoryMap[item.category] || 0) + item.quantity;
@@ -54,15 +45,15 @@ const Dashboard: React.FC = () => {
           .map(([category, amount]) => ({
             category,
             amount: `${totalWaste > 0 ? ((amount / totalWaste) * 100).toFixed(0) : 0}%`,
-            color: categoryColors[category] || 'bg-gray-400',
+            color: categoryColors[category] || 'bg-neutral-400',
           }))
           .sort((a,b) => parseFloat(b.amount) - parseFloat(a.amount));
 
         setStats([
-          { title: 'Total Savings', value: `$${totalSavings.toFixed(2)}`, change: '+0%', trend: 'up' as const, icon: DollarSign, color: 'primary' as const },
-          { title: 'Waste Diverted', value: `${totalWasteDiverted.toFixed(1)} lbs`, change: '+0%', trend: 'up' as const, icon: Trash2, color: 'success' as const },
-          { title: 'CO2 Emission Reduced', value: `${co2Reduced.toFixed(1)} lbs`, change: '+0%', trend: 'up' as const, icon: Leaf, color: 'accent' as const },
-          { title: 'Active Listings', value: activeListings.toString(), change: '+0%', trend: 'up' as const, icon: ShoppingCart, color: 'secondary' as const },
+          { title: 'Total Savings', value: `$${totalSavings.toFixed(2)}`, change: '+0%', trend: 'up' as const, icon: DollarSign, color: 'blue' as const },
+          { title: 'Waste Diverted', value: `${totalWasteDiverted.toFixed(1)} lbs`, change: '+0%', trend: 'up' as const, icon: Trash2, color: 'green' as const },
+          { title: 'CO2 Reduced', value: `${co2Reduced.toFixed(1)} lbs`, change: '+0%', trend: 'up' as const, icon: Leaf, color: 'teal' as const },
+          { title: 'Active Listings', value: activeListings.toString(), change: '+0%', trend: 'up' as const, icon: ShoppingCart, color: 'purple' as const },
         ]);
 
         setWasteByCategory(categoryArray);
@@ -78,22 +69,22 @@ const Dashboard: React.FC = () => {
   }, [user]);
 
   const categoryColors: { [key: string]: string } = {
-    produce: 'bg-success-500',
-    dairy: 'bg-primary-500',
-    bakery: 'bg-secondary-500',
-    meat: 'bg-accent-500',
-    pantry: 'bg-yellow-500',
-    frozen: 'bg-blue-500'
+    produce: 'bg-green-500',
+    dairy: 'bg-blue-500',
+    bakery: 'bg-amber-500',
+    meat: 'bg-red-500',
+    pantry: 'bg-orange-500',
+    frozen: 'bg-sky-500'
   };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600">Welcome back! Here's your food waste overview.</p>
+          <h1 className="text-3xl font-bold text-neutral-900">Dashboard</h1>
+          <p className="text-neutral-600">Welcome back! Here's your food waste overview.</p>
         </div>
-        <div className="flex items-center gap-2 text-sm text-gray-500">
+        <div className="flex items-center gap-2 text-sm text-neutral-500">
           <CheckCircle className="h-4 w-4 text-success-500" />
           <span>All systems operational</span>
         </div>
@@ -102,17 +93,8 @@ const Dashboard: React.FC = () => {
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         {loading ? (
           [...Array(4)].map((_, index) => (
-            <div key={index} className="card animate-pulse">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
-                  <div className="h-8 bg-gray-200 rounded w-32"></div>
-                </div>
-                <div className="h-12 w-12 rounded-lg bg-gray-200"></div>
-              </div>
-              <div className="mt-4 flex items-center gap-2">
-                <div className="h-5 w-28 bg-gray-200 rounded"></div>
-              </div>
+            <div key={index} className="card animate-pulse h-[138px]">
+              <div className="h-full bg-neutral-200 rounded-md"></div>
             </div>
           ))
         ) : (
@@ -129,43 +111,40 @@ const Dashboard: React.FC = () => {
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
+        <div className="lg:col-span-3">
           <WasteChart />
         </div>
-        <div>
-          <QuickActions />
+        <div className="lg:col-span-2">
+          <RecentActivity />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <RecentActivity />
-        <div className="card">
-          <h3 className="mb-4 text-lg font-semibold text-gray-900">Waste by Category</h3>
-          {loading ? (
-             <div className="space-y-3 animate-pulse">
-                {[...Array(4)].map((_, i) => <div key={i} className="h-6 bg-gray-200 rounded-md" />)}
-             </div>
-          ) : wasteByCategory.length > 0 ? (
-            <div className="space-y-3">
-              {wasteByCategory.map((item) => (
-                <div key={item.category} className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className={`h-3 w-3 rounded-full ${item.color}`} />
-                    <span className="text-sm text-gray-600 capitalize">{item.category}</span>
-                  </div>
-                  <span className="text-sm font-medium text-gray-900">{item.amount}</span>
+      <div className="card">
+        <h3 className="mb-4 text-lg font-semibold text-neutral-900">Waste by Category</h3>
+        {loading ? (
+            <div className="space-y-3 animate-pulse">
+              {[...Array(4)].map((_, i) => <div key={i} className="h-6 bg-neutral-200 rounded-md" />)}
+            </div>
+        ) : wasteByCategory.length > 0 ? (
+          <div className="space-y-3">
+            {wasteByCategory.map((item) => (
+              <div key={item.category} className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className={`h-3 w-3 rounded-full ${item.color}`} />
+                  <span className="text-sm text-neutral-600 capitalize">{item.category}</span>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8">
-              <BarChart3 className="mx-auto h-10 w-10 text-gray-300" />
-              <h4 className="mt-2 text-sm font-medium text-gray-900">No Waste Data</h4>
-              <p className="mt-1 text-sm text-gray-500">Log waste to see category breakdowns.</p>
-            </div>
-          )}
-        </div>
+                <span className="text-sm font-medium text-neutral-900">{item.amount}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-8">
+            <BarChart3 className="mx-auto h-10 w-10 text-neutral-300" />
+            <h4 className="mt-2 text-sm font-medium text-neutral-900">No Waste Data</h4>
+            <p className="mt-1 text-sm text-neutral-500">Log waste to see category breakdowns.</p>
+          </div>
+        )}
       </div>
     </div>
   );

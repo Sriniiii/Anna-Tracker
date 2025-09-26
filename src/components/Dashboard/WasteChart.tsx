@@ -52,7 +52,7 @@ const WasteChart: React.FC = () => {
         labels,
         datasets: [
           {
-            label: 'Waste Diverted (lbs)',
+            label: 'Waste Logged (lbs)',
             data: wasteData,
             borderColor: '#ef4444',
             backgroundColor: 'rgba(239, 68, 68, 0.1)',
@@ -103,13 +103,13 @@ const WasteChart: React.FC = () => {
   };
 
   return (
-    <div className="card">
+    <div className="card h-full">
       <div className="mb-6 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-900">Waste vs Saved</h3>
+        <h3 className="text-lg font-semibold text-neutral-900">Waste vs Saved Trends</h3>
         <select 
           value={timePeriod}
           onChange={(e) => setTimePeriod(Number(e.target.value))}
-          className="rounded-lg border border-gray-300 px-3 py-1 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+          className="rounded-md border-neutral-300 px-3 py-1 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
         >
           <option value={12}>Last 12 months</option>
           <option value={6}>Last 6 months</option>
