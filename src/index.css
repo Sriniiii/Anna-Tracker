@@ -11,6 +11,9 @@
   
   body {
     @apply bg-background text-text-secondary;
+    background-image: linear-gradient(to right, #f8fafc, #f0f4ff, #f8fafc);
+    background-size: 200% 200%;
+    @apply animate-gradient-shift;
   }
 }
 

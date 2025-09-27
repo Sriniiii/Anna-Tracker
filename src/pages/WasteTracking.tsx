@@ -92,7 +92,7 @@ const WasteTracking: React.FC = () => {
             <h1 className="text-3xl font-bold text-text-primary">Waste Tracking</h1>
             <p className="text-text-secondary">Monitor and log your food waste data.</p>
           </div>
-          <button onClick={() => setIsModalOpen(true)} className="btn-primary flex items-center gap-2">
+          <button data-cursor-interactive onClick={() => setIsModalOpen(true)} className="btn-primary flex items-center gap-2">
             <Plus className="h-4 w-4" />
             Log Waste
           </button>
@@ -109,7 +109,7 @@ const WasteTracking: React.FC = () => {
               <Trash2 className="h-12 w-12 text-slate-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-text-primary mb-2">No waste logged yet</h3>
               <p className="text-text-secondary mb-4">Start tracking to understand your waste patterns.</p>
-              <button onClick={() => setIsModalOpen(true)} className="btn-primary">
+              <button data-cursor-interactive onClick={() => setIsModalOpen(true)} className="btn-primary">
                 Log First Waste Entry
               </button>
             </div>
@@ -147,8 +147,8 @@ const WasteTracking: React.FC = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">{format(new Date(log.waste_date), 'MMM dd, yyyy')}</td>
                       {profile?.role === 'admin' && <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">{log.profiles?.email || 'N/A'}</td>}
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-primary-600 hover:text-primary-900 p-1 rounded-md hover:bg-primary-100 transition-colors mr-4"><Edit className="h-4 w-4" /></button>
-                        <button onClick={() => handleDelete(log.id)} className="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-100 transition-colors"><Trash2 className="h-4 w-4" /></button>
+                        <button data-cursor-interactive className="text-primary-600 hover:text-primary-900 p-1 rounded-md hover:bg-primary-100 transition-colors mr-4"><Edit className="h-4 w-4" /></button>
+                        <button data-cursor-interactive onClick={() => handleDelete(log.id)} className="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-100 transition-colors"><Trash2 className="h-4 w-4" /></button>
                       </td>
                     </motion.tr>
                   ))}

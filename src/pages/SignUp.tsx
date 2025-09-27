@@ -78,6 +78,7 @@ const SignUp: React.FC = () => {
           </div>
 
           <button
+            data-cursor-interactive
             type="submit"
             className="btn-primary w-full flex items-center justify-center gap-2"
             disabled={loading}
@@ -93,7 +94,7 @@ const SignUp: React.FC = () => {
 
         <p className="text-center text-sm text-text-secondary">
           Already have an account?{' '}
-          <Link to="/signin" className="font-medium text-primary-600 hover:text-primary-500">
+          <Link to="/signin" data-cursor-interactive className="font-medium text-primary-600 hover:text-primary-500">
             Sign in
           </Link>
         </p>

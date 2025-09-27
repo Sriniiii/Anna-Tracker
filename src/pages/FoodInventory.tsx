@@ -110,7 +110,7 @@ const FoodInventory: React.FC = () => {
             <h1 className="text-3xl font-bold text-text-primary">Stock Inventory</h1>
             <p className="text-text-secondary">Manage your food stock and track expiration dates.</p>
           </div>
-          <button onClick={() => setIsModalOpen(true)} className="btn-primary flex items-center gap-2">
+          <button data-cursor-interactive onClick={() => setIsModalOpen(true)} className="btn-primary flex items-center gap-2">
             <Plus className="h-4 w-4" />
             Add Item
           </button>
@@ -139,7 +139,7 @@ const FoodInventory: React.FC = () => {
               <Package className="h-12 w-12 text-slate-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-text-primary mb-2">No items found</h3>
               <p className="text-text-secondary mb-4">Your inventory is empty or no items match your search.</p>
-              <button onClick={() => setIsModalOpen(true)} className="btn-primary">
+              <button data-cursor-interactive onClick={() => setIsModalOpen(true)} className="btn-primary">
                 Add First Item
               </button>
             </div>
@@ -177,8 +177,8 @@ const FoodInventory: React.FC = () => {
                       <td className="px-6 py-4 whitespace-nowrap"><ExpiryStatus date={item.expiration_date} /></td>
                       {profile?.role === 'admin' && <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">{item.profiles?.email || 'N/A'}</td>}
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-primary-600 hover:text-primary-900 p-1 rounded-md hover:bg-primary-100 transition-colors"><Edit className="h-4 w-4" /></button>
-                        <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-100 transition-colors ml-2"><Trash2 className="h-4 w-4" /></button>
+                        <button data-cursor-interactive className="text-primary-600 hover:text-primary-900 p-1 rounded-md hover:bg-primary-100 transition-colors"><Edit className="h-4 w-4" /></button>
+                        <button data-cursor-interactive onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-100 transition-colors ml-2"><Trash2 className="h-4 w-4" /></button>
                       </td>
                     </motion.tr>
                   ))}

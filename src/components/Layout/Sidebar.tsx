@@ -8,10 +8,10 @@ import {
   BarChart3, 
   ShoppingCart, 
   Settings,
-  Users,
-  Leaf
+  Users
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import AnimatedLogo from '../UI/AnimatedLogo';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, admin: false },
@@ -22,15 +22,18 @@ const navigation = [
   { name: 'User Management', href: '/user-management', icon: Users, admin: true },
 ];
 
+const navItemVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: { opacity: 1, x: 0 },
+};
+
 const Sidebar: React.FC = () => {
   const { profile } = useAuth();
 
   return (
     <div className="flex w-64 flex-col bg-surface border-r border-surface-border">
       <div className="flex items-center gap-3 p-6 h-16">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600 text-white">
-          <Leaf className="h-6 w-6" />
-        </div>
+        <AnimatedLogo />
         <div>
           <h1 className="text-xl font-bold text-text-primary">BiteWise</h1>
         </div>
@@ -38,15 +41,21 @@ const Sidebar: React.FC = () => {
       
       <nav className="flex-1 px-4 py-4">
         <p className="px-3 text-xs font-semibold text-text-secondary uppercase tracking-wider mb-3">Menu</p>
-        <ul className="space-y-1.5">
+        <motion.ul 
+          className="space-y-1.5"
+          initial="hidden"
+          animate="visible"
+          transition={{ staggerChildren: 0.07 }}
+        >
           {navigation.map((item) => {
             if (item.admin && profile?.role !== 'admin') {
               return null;
             }
             return (
-              <li key={item.name}>
+              <motion.li key={item.name} variants={navItemVariants}>
                 <NavLink
                   to={item.href}
+                  data-cursor-interactive
                   className="relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors text-text-secondary hover:bg-slate-100 hover:text-text-primary data-[active=true]:text-primary-600 data-[active=true]:font-semibold"
                 >
                   {({ isActive }) => (
@@ -63,10 +72,10 @@ const Sidebar: React.FC = () => {
                     </>
                   )}
                 </NavLink>
-              </li>
+              </motion.li>
             );
           })}
-        </ul>
+        </motion.ul>
       </nav>
 
       <div className="mt-auto p-4">
@@ -74,6 +83,7 @@ const Sidebar: React.FC = () => {
           <li>
             <NavLink
               to="/settings"
+              data-cursor-interactive
               className="relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors text-text-secondary hover:bg-slate-100 hover:text-text-primary data-[active=true]:text-primary-600 data-[active=true]:font-semibold"
             >
               {({ isActive }) => (

@@ -85,7 +85,7 @@ const UserManagement: React.FC = () => {
             <h1 className="text-3xl font-bold text-text-primary">User Management</h1>
             <p className="text-text-secondary">View, edit, and manage all users in the system.</p>
           </div>
-          <button onClick={() => handleAction('Add', '')} className="btn-primary flex items-center gap-2 w-full md:w-auto">
+          <button data-cursor-interactive onClick={() => handleAction('Add', '')} className="btn-primary flex items-center gap-2 w-full md:w-auto">
             <UserPlus className="h-4 w-4" />
             Add User
           </button>
@@ -162,8 +162,8 @@ const UserManagement: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">{format(new Date(user.updated_at), 'MMM dd, yyyy')}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button onClick={() => handleAction('Edit', user.full_name)} className="text-primary-600 hover:text-primary-900 p-1 rounded-md hover:bg-primary-100 transition-colors mr-4"><Edit className="h-4 w-4" /></button>
-                        <button onClick={() => handleAction('Delete', user.full_name)} className="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-100 transition-colors"><Trash2 className="h-4 w-4" /></button>
+                        <button data-cursor-interactive onClick={() => handleAction('Edit', user.full_name)} className="text-primary-600 hover:text-primary-900 p-1 rounded-md hover:bg-primary-100 transition-colors mr-4"><Edit className="h-4 w-4" /></button>
+                        <button data-cursor-interactive onClick={() => handleAction('Delete', user.full_name)} className="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-100 transition-colors"><Trash2 className="h-4 w-4" /></button>
                       </td>
                     </motion.tr>
                   ))}

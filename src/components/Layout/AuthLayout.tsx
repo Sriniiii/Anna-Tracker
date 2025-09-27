@@ -1,15 +1,15 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { Leaf } from 'lucide-react';
+import AnimatedLogo from '../UI/AnimatedLogo';
+import LiveCursor from '../UI/LiveCursor';
 
 const AuthLayout: React.FC = () => {
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-background p-4">
+      <LiveCursor />
       <div className="w-full max-w-md">
         <div className="mb-8 flex flex-col items-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary-600 text-white">
-            <Leaf className="h-7 w-7" />
-          </div>
+          <AnimatedLogo />
           <h1 className="text-3xl font-bold text-text-primary mt-4">BiteWise</h1>
           <p className="text-text-secondary">Food Waste Management Platform</p>
         </div>

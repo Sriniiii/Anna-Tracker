@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, MapPin, Clock, Heart, Plus, ShoppingCart } from 'lucide-react';
+import { Search, MapPin, Clock, Heart, Plus } from 'lucide-react';
 import { useToast } from '../hooks/useToast';
 import Toast from '../components/UI/Toast';
 import { MarketplaceListing } from '../types/database';
 import AddListingModal from '../components/Modals/AddListingModal';
 import { faker } from '@faker-js/faker';
+import SpotlightCard from '../components/UI/SpotlightCard';
+import AnimatedButton from '../components/UI/AnimatedButton';
 
 const containerVariants = {
   hidden: { opacity: 1 },
@@ -110,7 +112,7 @@ const Marketplace: React.FC = () => {
             <h1 className="text-3xl font-bold text-text-primary">Food Bazaar</h1>
             <p className="text-text-secondary">Discover surplus food from local vendors at great prices.</p>
           </div>
-          <button onClick={() => setIsModalOpen(true)} className="btn-primary flex items-center gap-2">
+          <button data-cursor-interactive onClick={() => setIsModalOpen(true)} className="btn-primary flex items-center gap-2">
             <Plus className="h-4 w-4" />
             Post Listing
           </button>
@@ -136,6 +138,7 @@ const Marketplace: React.FC = () => {
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
+                  data-cursor-interactive
                   className={`px-4 py-2 text-sm font-medium rounded-full transition-colors whitespace-nowrap ${
                     selectedCategory === category.id
                       ? 'bg-primary-600 text-white shadow-sm'
@@ -174,11 +177,11 @@ const Marketplace: React.FC = () => {
                     exit={{ opacity: 0, scale: 0.8 }}
                     transition={{ type: 'spring', stiffness: 260, damping: 20 }}
                   >
-                    <div className="card overflow-hidden p-0 flex flex-col group h-full">
+                    <SpotlightCard className="card overflow-hidden p-0 flex flex-col group h-full">
                       <div className="relative">
                         <div className="overflow-hidden rounded-t-xl">
                           <motion.img
-                            src={listing.image_url || 'https://img-wrapper.vercel.app/image?url=https://placehold.co/400x300.png?text=No+Image'}
+                            src={listing.image_url || 'https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://placehold.co/400x300.png?text=No+Image'}
                             alt={listing.title}
                             className="w-full h-48 object-cover"
                             whileHover={{ scale: 1.05 }}
@@ -191,6 +194,7 @@ const Marketplace: React.FC = () => {
                         </div>
                         <motion.button
                           onClick={() => toggleFavorite(listing.id)}
+                          data-cursor-interactive
                           className="absolute top-3 right-3 rounded-full bg-white/80 backdrop-blur-sm p-2 shadow-md hover:bg-white"
                           whileHover={{ scale: 1.15 }}
                           whileTap={{ scale: 0.9 }}
@@ -226,16 +230,10 @@ const Marketplace: React.FC = () => {
                         </div>
                         
                         <div className="mt-auto">
-                          <button
-                            onClick={() => handleAddToCart(listing)}
-                            className="btn-primary w-full flex items-center justify-center gap-2"
-                          >
-                            <ShoppingCart className="h-4 w-4" />
-                            Add to Cart
-                          </button>
+                          <AnimatedButton onClick={() => handleAddToCart(listing)} />
                         </div>
                       </div>
-                    </div>
+                    </SpotlightCard>
                   </motion.div>
                 ))
               ) : (

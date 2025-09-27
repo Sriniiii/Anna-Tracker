@@ -11,9 +11,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: colors.blue,
+        primary: colors.violet,
         secondary: colors.slate,
-        accent: colors.pink,
+        accent: colors.fuchsia,
         success: colors.green,
         warning: colors.amber,
         error: colors.red,
@@ -30,6 +30,15 @@ export default {
         'soft': '0 1px 3px 0 rgb(0 0 0 / 0.05)',
         'medium': '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
         'strong': '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+      },
+      animation: {
+        'gradient-shift': 'gradient-shift 15s ease infinite',
+      },
+      keyframes: {
+        'gradient-shift': {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
       },
     },
   },

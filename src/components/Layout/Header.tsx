@@ -40,7 +40,7 @@ const Header: React.FC = () => {
   const unreadCount = notifications.filter(n => !n.is_read).length;
 
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-surface-border bg-surface px-6 h-16">
+    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-surface-border bg-surface/80 backdrop-blur-sm px-6 h-16">
       <div className="flex items-center gap-4">
         <form onSubmit={handleSearch} className="relative">
           <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-secondary" />
@@ -57,6 +57,7 @@ const Header: React.FC = () => {
       <div className="flex items-center gap-5">
         <div className="relative">
           <button 
+            data-cursor-interactive
             onClick={() => setShowNotifications(!showNotifications)}
             className="relative rounded-full h-10 w-10 flex items-center justify-center text-text-secondary hover:bg-slate-100 hover:text-text-primary transition-colors"
           >
@@ -108,7 +109,7 @@ const Header: React.FC = () => {
                   )}
                 </div>
                 <div className="p-3 border-t border-surface-border">
-                  <button className="w-full text-sm text-primary-600 hover:text-primary-700 font-medium">
+                  <button data-cursor-interactive className="w-full text-sm text-primary-600 hover:text-primary-700 font-medium">
                     View all notifications
                   </button>
                 </div>
@@ -119,6 +120,7 @@ const Header: React.FC = () => {
         
         <div className="relative">
           <button 
+            data-cursor-interactive
             onClick={() => setShowUserMenu(!showUserMenu)}
             className="flex items-center gap-2 rounded-full p-1 text-text-secondary hover:bg-slate-100 transition-colors"
           >
@@ -150,16 +152,17 @@ const Header: React.FC = () => {
                   <p className="text-sm text-text-secondary truncate">{user?.email}</p>
                 </div>
                 <div className="py-2">
-                  <NavLink to="/settings" className="w-full flex items-center gap-3 px-4 py-2 text-sm text-text-secondary hover:bg-slate-100 hover:text-text-primary">
+                  <NavLink to="/settings" data-cursor-interactive className="w-full flex items-center gap-3 px-4 py-2 text-sm text-text-secondary hover:bg-slate-100 hover:text-text-primary">
                     <Settings className="h-4 w-4" />
                     Settings
                   </NavLink>
-                  <button className="w-full flex items-center gap-3 px-4 py-2 text-sm text-text-secondary hover:bg-slate-100 hover:text-text-primary">
+                  <button data-cursor-interactive className="w-full flex items-center gap-3 px-4 py-2 text-sm text-text-secondary hover:bg-slate-100 hover:text-text-primary">
                     <HelpCircle className="h-4 w-4" />
                     Help & Support
                   </button>
                   <hr className="my-2 border-slate-100" />
                   <button 
+                    data-cursor-interactive
                     onClick={signOut}
                     className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700"
                   >

@@ -100,6 +100,7 @@ const QuickActions: React.FC = () => {
           {actions.map((action) => (
             <button
               key={action.title}
+              data-cursor-interactive
               onClick={() => handleAction(action.action)}
               className={`group flex flex-col items-center gap-2 rounded-lg p-4 text-white transition-all hover:scale-105 ${action.color}`}
             >
@@ -116,13 +117,13 @@ const QuickActions: React.FC = () => {
       <AddInventoryModal
         isOpen={showAddInventory}
         onClose={() => setShowAddInventory(false)}
-        onSubmit={handleAddInventory}
+        onSuccess={handleAddInventory}
       />
 
       <LogWasteModal
         isOpen={showLogWaste}
         onClose={() => setShowLogWaste(false)}
-        onSubmit={handleLogWaste}
+        onSuccess={handleLogWaste}
       />
 
       <Toast {...toast} onClose={hideToast} />
