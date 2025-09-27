@@ -1,5 +1,6 @@
   https://bite-wise-git-main-sriniwas-projects.vercel.app
-
+demo id - jaanvikanda05@gmail.com
+pass-kndajaanvi0509
 # Project Setup
     
     To run this project, follow these steps:
