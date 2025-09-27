@@ -14,6 +14,7 @@ import { useAuth } from './context/AuthContext';
 import AuthLayout from './components/Layout/AuthLayout';
 import AdminRoute from './components/AdminRoute';
 import UserManagement from './pages/UserManagement';
+import { MotionConfig } from 'framer-motion';
 
 const App: React.FC = () => {
   const { loading, session } = useAuth();
@@ -27,38 +28,40 @@ const App: React.FC = () => {
   }
 
   return (
-    <Routes>
-      <Route path="/" element={!session ? <Navigate to="/signin" /> : <Navigate to="/dashboard" />} />
+    <MotionConfig transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}>
+      <Routes>
+        <Route path="/" element={!session ? <Navigate to="/signin" /> : <Navigate to="/dashboard" />} />
 
-      <Route element={<AuthLayout />}>
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-      </Route>
-      
-      <Route 
-        path="/" 
-        element={
-          <ProtectedRoute>
-            <Layout />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="inventory" element={<FoodInventory />} />
-        <Route path="waste-tracking" element={<WasteTracking />} />
-        <Route path="analytics" element={<Analytics />} />
-        <Route path="marketplace" element={<Marketplace />} />
-        <Route path="settings" element={<Settings />} />
+        <Route element={<AuthLayout />}>
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+        </Route>
+        
         <Route 
-          path="user-management" 
+          path="/" 
           element={
-            <AdminRoute>
-              <UserManagement />
-            </AdminRoute>
-          } 
-        />
-      </Route>
-    </Routes>
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="inventory" element={<FoodInventory />} />
+          <Route path="waste-tracking" element={<WasteTracking />} />
+          <Route path="analytics" element={<Analytics />} />
+          <Route path="marketplace" element={<Marketplace />} />
+          <Route path="settings" element={<Settings />} />
+          <Route 
+            path="user-management" 
+            element={
+              <AdminRoute>
+                <UserManagement />
+              </AdminRoute>
+            } 
+          />
+        </Route>
+      </Routes>
+    </MotionConfig>
   );
 };
 

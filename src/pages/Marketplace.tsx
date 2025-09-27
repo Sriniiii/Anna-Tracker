@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, MapPin, Clock, Heart, ShoppingCart, Plus } from 'lucide-react';
+import { Search, MapPin, Clock, Heart, Plus } from 'lucide-react';
 import { useToast } from '../hooks/useToast';
 import Toast from '../components/UI/Toast';
 import { MarketplaceListing } from '../types/database';
 import AddListingModal from '../components/Modals/AddListingModal';
 import { faker } from '@faker-js/faker';
 import AnimatedButton from '../components/UI/AnimatedButton';
+import SpotlightCard from '../components/UI/SpotlightCard';
 
 const containerVariants = {
   hidden: { opacity: 1 },
@@ -111,7 +112,7 @@ const Marketplace: React.FC = () => {
             <h1 className="text-3xl font-bold text-gray-900">Food Bazaar</h1>
             <p className="text-gray-600">Discover surplus food from local vendors at great prices.</p>
           </div>
-          <button onClick={() => setIsModalOpen(true)} className="btn-primary flex items-center gap-2">
+          <button data-cursor-interactive onClick={() => setIsModalOpen(true)} className="btn-primary flex items-center gap-2">
             <Plus className="h-4 w-4" />
             Post Listing
           </button>
@@ -123,6 +124,7 @@ const Marketplace: React.FC = () => {
               <div className="relative">
                 <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                 <input
+                  data-cursor-interactive
                   type="text"
                   placeholder="Search for food, vegetables, etc..."
                   value={searchQuery}
@@ -135,6 +137,7 @@ const Marketplace: React.FC = () => {
             <div className="flex items-center gap-2 overflow-x-auto pb-2">
               {categories.map(category => (
                 <button
+                  data-cursor-interactive
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
                   className={`px-4 py-2 text-sm font-medium rounded-full transition-colors whitespace-nowrap ${
@@ -173,64 +176,67 @@ const Marketplace: React.FC = () => {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    whileHover={{ y: -5, boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)' }}
                     transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                    className="card overflow-hidden p-0 flex flex-col group"
                   >
-                    <div className="relative">
-                      <div className="overflow-hidden rounded-t-xl">
-                        <motion.img
-                          src={listing.image_url || 'https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://placehold.co/400x300.png?text=No+Image'}
-                          alt={listing.title}
-                          className="w-full h-48 object-cover"
-                          whileHover={{ scale: 1.05 }}
-                        />
-                      </div>
-                      <div className="absolute top-3 left-3">
-                        <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-                          {getDiscountPercentage(listing.original_price, listing.discounted_price)}% OFF
-                        </span>
-                      </div>
-                      <motion.button
-                        onClick={() => toggleFavorite(listing.id)}
-                        className="absolute top-3 right-3 rounded-full bg-white/80 backdrop-blur-sm p-2 shadow-md hover:bg-white"
-                        whileHover={{ scale: 1.15 }}
-                        whileTap={{ scale: 0.9 }}
-                      >
-                        <Heart
-                          className={`h-4 w-4 transition-all ${
-                            favorites.includes(listing.id) 
-                              ? 'fill-red-500 text-red-500' 
-                              : 'text-gray-500'
-                          }`}
-                        />
-                      </motion.button>
-                    </div>
-                    
-                    <div className="p-4 flex-grow flex flex-col">
-                      <h3 className="font-semibold text-gray-900 truncate">{listing.title}</h3>
-                      <p className="text-sm text-gray-500 mb-3">{listing.vendor}</p>
-                      
-                      <div className="flex items-baseline gap-2 mb-3">
-                        <span className="text-xl font-bold text-gray-900">₹{listing.discounted_price.toFixed(0)}</span>
-                        <span className="text-sm text-gray-500 line-through">₹{listing.original_price.toFixed(0)}</span>
-                      </div>
-                      
-                      <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
-                        <div className="flex items-center gap-1">
-                          <MapPin className="h-3 w-3" />
-                          <span>{listing.location}</span>
+                    <SpotlightCard className="h-full">
+                      <div className="card overflow-hidden p-0 flex flex-col group h-full">
+                        <div className="relative">
+                          <div className="overflow-hidden rounded-t-xl">
+                            <motion.img
+                              src={listing.image_url || 'https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://placehold.co/400x300.png?text=No+Image'}
+                              alt={listing.title}
+                              className="w-full h-48 object-cover"
+                              whileHover={{ scale: 1.05 }}
+                            />
+                          </div>
+                          <div className="absolute top-3 left-3">
+                            <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                              {getDiscountPercentage(listing.original_price, listing.discounted_price)}% OFF
+                            </span>
+                          </div>
+                          <motion.button
+                            data-cursor-interactive
+                            onClick={() => toggleFavorite(listing.id)}
+                            className="absolute top-3 right-3 rounded-full bg-white/80 backdrop-blur-sm p-2 shadow-md hover:bg-white"
+                            whileHover={{ scale: 1.15 }}
+                            whileTap={{ scale: 0.9 }}
+                          >
+                            <Heart
+                              className={`h-4 w-4 transition-all ${
+                                favorites.includes(listing.id) 
+                                  ? 'fill-red-500 text-red-500' 
+                                  : 'text-gray-500'
+                              }`}
+                            />
+                          </motion.button>
                         </div>
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          <span>{listing.expires_in}</span>
+                        
+                        <div className="p-4 flex-grow flex flex-col">
+                          <h3 className="font-semibold text-gray-900 truncate">{listing.title}</h3>
+                          <p className="text-sm text-gray-500 mb-3">{listing.vendor}</p>
+                          
+                          <div className="flex items-baseline gap-2 mb-3">
+                            <span className="text-xl font-bold text-gray-900">₹{listing.discounted_price.toFixed(0)}</span>
+                            <span className="text-sm text-gray-500 line-through">₹{listing.original_price.toFixed(0)}</span>
+                          </div>
+                          
+                          <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
+                            <div className="flex items-center gap-1">
+                              <MapPin className="h-3 w-3" />
+                              <span>{listing.location}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Clock className="h-3 w-3" />
+                              <span>{listing.expires_in}</span>
+                            </div>
+                          </div>
+                          
+                          <div className="mt-auto">
+                            <AnimatedButton onClick={() => handleAddToCart(listing)} />
+                          </div>
                         </div>
                       </div>
-                      
-                      <div className="mt-auto">
-                        <AnimatedButton onClick={() => handleAddToCart(listing)} />
-                      </div>
-                    </div>
+                    </SpotlightCard>
                   </motion.div>
                 ))
               ) : (

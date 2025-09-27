@@ -5,6 +5,7 @@ import StatCard from '../components/Dashboard/StatCard';
 import WasteChart from '../components/Dashboard/WasteChart';
 import RecentActivity from '../components/Dashboard/RecentActivity';
 import { faker } from '@faker-js/faker';
+import SpotlightCard from '../components/UI/SpotlightCard';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -25,46 +26,24 @@ const itemVariants = {
 };
 
 const Dashboard: React.FC = () => {
-  const [stats, setStats] = useState([
-    { title: 'Total Savings', value: 0, prefix: '₹', suffix: '', change: '+0%', trend: 'up' as const, icon: () => <span className="font-bold text-primary-600">₹</span>, color: 'blue' as const },
-    { title: 'Waste Diverted', value: 0, prefix: '', suffix: ' kg', change: '+0%', trend: 'up' as const, icon: Trash2, color: 'green' as const },
-    { title: 'CO2 Reduced', value: 0, prefix: '', suffix: ' kg', change: '+0%', trend: 'up' as const, icon: Leaf, color: 'teal' as const },
-    { title: 'Active Listings', value: 0, prefix: '', suffix: '', change: '+0%', trend: 'up' as const, icon: ShoppingCart, color: 'pink' as const },
-  ]);
-  const [wasteByCategory, setWasteByCategory] = useState<any[]>([]);
+  const [stats, setStats] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
 
     try {
-      const totalSavings = faker.number.int({ min: 80000, max: 400000 });
-      const totalWasteDiverted = faker.number.float({ min: 50, max: 250, precision: 1 });
+      const totalSavings = faker.number.int({ min: 5000, max: 25000 });
+      const totalWasteDiverted = faker.number.float({ min: 20, max: 100, precision: 1 });
       const co2Reduced = totalWasteDiverted * 2.5;
-      const activeListings = faker.number.int({ min: 10, max: 50 });
-
-      const categories = ['produce', 'dairy', 'bakery', 'meat', 'pantry', 'frozen'];
-      const categoryMap: { [key: string]: number } = {};
-      categories.forEach(cat => {
-        categoryMap[cat] = faker.number.int({ min: 10, max: 100 });
-      });
-      const totalWaste = Object.values(categoryMap).reduce((sum, val) => sum + val, 0);
-      const categoryArray = Object.entries(categoryMap)
-        .map(([category, amount]) => ({
-          category,
-          percentage: totalWaste > 0 ? (amount / totalWaste) * 100 : 0,
-          color: categoryColors[category] || 'bg-neutral-400',
-        }))
-        .sort((a,b) => b.percentage - a.percentage);
+      const activeListings = faker.number.int({ min: 5, max: 30 });
 
       setStats([
-        { title: 'Total Savings', value: totalSavings, prefix: '₹', suffix: '', change: `+${faker.number.float({ min: 1, max: 10, precision: 1 })}%`, trend: 'up' as const, icon: () => <span className="font-bold text-primary-600">₹</span>, color: 'blue' as const },
-        { title: 'Waste Diverted', value: totalWasteDiverted, prefix: '', suffix: ' kg', change: `+${faker.number.float({ min: 1, max: 10, precision: 1 })}%`, trend: 'up' as const, icon: Trash2, color: 'green' as const },
-        { title: 'CO2 Reduced', value: co2Reduced, prefix: '', suffix: ' kg', change: `+${faker.number.float({ min: 1, max: 10, precision: 1 })}%`, trend: 'up' as const, icon: Leaf, color: 'teal' as const },
-        { title: 'Active Listings', value: activeListings, prefix: '', suffix: '', change: `+${faker.number.int({ min: 1, max: 5 })}`, trend: 'up' as const, icon: ShoppingCart, color: 'pink' as const },
+        { title: 'Total Savings', value: totalSavings, prefix: '₹', suffix: '', icon: () => <span className="font-bold text-primary-600">₹</span>, color: 'blue' as const },
+        { title: 'Waste Diverted', value: totalWasteDiverted, prefix: '', suffix: ' kg', icon: Trash2, color: 'green' as const },
+        { title: 'CO2 Reduced', value: co2Reduced, prefix: '', suffix: ' kg', icon: Leaf, color: 'teal' as const },
+        { title: 'Active Listings', value: activeListings, prefix: '', suffix: '', icon: ShoppingCart, color: 'pink' as const },
       ]);
-
-      setWasteByCategory(categoryArray);
 
     } catch (error) {
       console.error("Error generating dashboard data", error);
@@ -72,15 +51,6 @@ const Dashboard: React.FC = () => {
       setLoading(false);
     }
   }, []);
-
-  const categoryColors: { [key: string]: string } = {
-    produce: 'bg-green-500',
-    dairy: 'bg-blue-500',
-    bakery: 'bg-amber-500',
-    meat: 'bg-red-500',
-    pantry: 'bg-orange-500',
-    frozen: 'bg-sky-500'
-  };
 
   return (
     <motion.div 
@@ -101,7 +71,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       <motion.div 
-        className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -115,18 +85,24 @@ const Dashboard: React.FC = () => {
         ) : (
           stats.map((stat) => (
             <motion.div key={stat.title} variants={itemVariants}>
-              <StatCard {...stat} />
+              <SpotlightCard>
+                <StatCard {...stat} />
+              </SpotlightCard>
             </motion.div>
           ))
         )}
       </motion.div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-        <div className="lg:col-span-3">
-          <WasteChart />
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <RecentActivity />
+          <SpotlightCard>
+            <WasteChart />
+          </SpotlightCard>
+        </div>
+        <div className="lg:col-span-1">
+          <SpotlightCard>
+            <RecentActivity />
+          </SpotlightCard>
         </div>
       </div>
     </motion.div>

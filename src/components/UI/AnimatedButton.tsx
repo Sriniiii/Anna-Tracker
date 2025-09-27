@@ -18,6 +18,7 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({ onClick }) => {
 
   return (
     <button
+      data-cursor-interactive
       onClick={handleClick}
       className={`btn-primary w-full flex items-center justify-center gap-2 text-sm ${status === 'success' ? 'bg-success-600 hover:bg-success-700' : ''}`}
       disabled={status !== 'idle'}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrendingUp, TrendingDown, type LucideIcon } from 'lucide-react';
+import { type LucideIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import AnimatedNumber from '../UI/AnimatedNumber';
 
@@ -8,8 +8,6 @@ interface StatCardProps {
   value: number;
   prefix?: string;
   suffix?: string;
-  change: string;
-  trend: 'up' | 'down';
   icon: LucideIcon | React.FC<any>;
   color: 'blue' | 'pink' | 'teal' | 'green' | 'yellow' | 'red';
 }
@@ -23,7 +21,7 @@ const colorClasses = {
   red: { bg: 'bg-red-100', text: 'text-red-600' },
 };
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, prefix, suffix, change, trend, icon: Icon, color }) => {
+const StatCard: React.FC<StatCardProps> = ({ title, value, prefix, suffix, icon: Icon, color }) => {
   const { bg, text } = colorClasses[color] || colorClasses.blue;
 
   return (
@@ -36,18 +34,8 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, prefix, suffix, chang
         <div className={`rounded-lg p-3 ${bg}`}>
           <Icon className={`h-6 w-6 ${text}`} />
         </div>
-        <div className="flex items-center gap-1">
-          {trend === 'up' ? (
-            <TrendingUp className="h-4 w-4 text-success-500" />
-          ) : (
-            <TrendingDown className="h-4 w-4 text-error-500" />
-          )}
-          <span className={`text-sm font-medium ${trend === 'up' ? 'text-success-600' : 'text-error-600'}`}>
-            {change}
-          </span>
-        </div>
       </div>
-      <div className="mt-4">
+      <div className="mt-8">
         <p className="text-sm font-medium text-neutral-600">{title}</p>
         <AnimatedNumber 
           value={value}

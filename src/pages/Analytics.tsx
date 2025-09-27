@@ -31,22 +31,22 @@ const Analytics: React.FC = () => {
     setLoading(true);
 
     try {
-      const totalSavings = faker.number.int({ min: 40000, max: 160000 });
-      const totalWasteDiverted = faker.number.float({ min: 25, max: 150, precision: 0.1 });
+      const totalSavings = faker.number.int({ min: 10000, max: 50000 });
+      const totalWasteDiverted = faker.number.float({ min: 20, max: 120, precision: 0.1 });
       const co2Reduced = totalWasteDiverted * 2.5;
-      const itemsRedistributed = faker.number.int({ min: 50, max: 200 });
+      const itemsRedistributed = faker.number.int({ min: 40, max: 150 });
 
       setMetrics([
-        { title: 'Cost Savings', value: totalSavings, prefix: '₹', suffix: '', change: `+${faker.number.float({min: 1, max: 10, precision: 1})}%`, trend: 'up', color: 'text-primary-500', icon: () => <span className="font-bold">₹</span> },
-        { title: 'Waste Diverted', value: totalWasteDiverted, prefix: '', suffix: ' kg', change: `+${faker.number.float({min: 1, max: 10, precision: 1})}%`, trend: 'up', color: 'text-success-500', icon: TrendingUp },
-        { title: 'Items Redistributed', value: itemsRedistributed, prefix: '', suffix: '', change: `+${faker.number.int({min: 1, max: 10})}`, trend: 'up', color: 'text-accent-500', icon: BarChart3 },
-        { title: 'Carbon Footprint Reduced', value: co2Reduced, prefix: '', suffix: ' kg CO2e', change: `+${faker.number.float({min: 1, max: 10, precision: 1})}%`, trend: 'up', color: 'text-green-500', icon: Leaf },
+        { title: 'Cost Savings', value: totalSavings, prefix: '₹', suffix: '', color: 'text-primary-500', icon: () => <span className="font-bold">₹</span> },
+        { title: 'Waste Diverted', value: totalWasteDiverted, prefix: '', suffix: ' kg', color: 'text-success-500', icon: TrendingUp },
+        { title: 'Items Redistributed', value: itemsRedistributed, prefix: '', suffix: '', color: 'text-accent-500', icon: BarChart3 },
+        { title: 'Carbon Footprint Reduced', value: co2Reduced, prefix: '', suffix: ' kg CO2e', color: 'text-green-500', icon: Leaf },
       ]);
 
       const categoryMap: { [key: string]: number } = {};
       const categories = ['produce', 'dairy', 'bakery', 'meat', 'pantry', 'frozen'];
       categories.forEach(cat => {
-        categoryMap[cat] = faker.number.int({ min: 10, max: 100 });
+        categoryMap[cat] = faker.number.int({ min: 5, max: 80 });
       });
 
       const totalWaste = Object.values(categoryMap).reduce((sum, val) => sum + val, 0);
@@ -130,10 +130,7 @@ const Analytics: React.FC = () => {
                 <metric.icon className={`h-6 w-6 ${metric.color}`} />
               </div>
             </div>
-            <div className="mt-4 flex items-center gap-2">
-              <span className={`text-sm font-medium ${metric.color}`}>{metric.change}</span>
-              <span className="text-sm text-gray-500">from last period</span>
-            </div>
+            <div className="mt-4 h-5" /> {/* Placeholder for removed trend line to maintain card height */}
           </motion.div>
         ))}
       </motion.div>

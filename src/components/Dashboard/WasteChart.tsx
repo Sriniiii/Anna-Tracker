@@ -21,8 +21,8 @@ const WasteChart: React.FC = () => {
     for (let i = timePeriod - 1; i >= 0; i--) {
       const date = subMonths(new Date(), i);
       labels.push(format(date, 'MMM'));
-      wasteData.push(faker.number.int({ min: 50, max: 500 }));
-      savedData.push(faker.number.int({ min: 100, max: 750 }));
+      wasteData.push(faker.number.int({ min: 10, max: 80 }));
+      savedData.push(faker.number.int({ min: 20, max: 150 }));
     }
 
     setChartData({

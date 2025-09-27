@@ -45,6 +45,7 @@ const Header: React.FC = () => {
         <form onSubmit={handleSearch} className="relative">
           <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
           <input
+            data-cursor-interactive
             type="text"
             placeholder="Search..."
             value={searchQuery}
@@ -57,6 +58,7 @@ const Header: React.FC = () => {
       <div className="flex items-center gap-5">
         <div className="relative">
           <button 
+            data-cursor-interactive
             onClick={() => setShowNotifications(!showNotifications)}
             className="relative rounded-full h-10 w-10 flex items-center justify-center text-neutral-500 hover:bg-neutral-100 hover:text-neutral-700 transition-colors"
           >
@@ -108,7 +110,7 @@ const Header: React.FC = () => {
                   )}
                 </div>
                 <div className="p-3 border-t border-neutral-200">
-                  <button className="w-full text-sm text-primary-600 hover:text-primary-700 font-medium">
+                  <button data-cursor-interactive className="w-full text-sm text-primary-600 hover:text-primary-700 font-medium">
                     View all notifications
                   </button>
                 </div>
@@ -119,6 +121,7 @@ const Header: React.FC = () => {
         
         <div className="relative">
           <button 
+            data-cursor-interactive
             onClick={() => setShowUserMenu(!showUserMenu)}
             className="flex items-center gap-2 rounded-full p-1 text-neutral-600 hover:bg-neutral-100 transition-colors"
           >
@@ -150,16 +153,17 @@ const Header: React.FC = () => {
                   <p className="text-sm text-neutral-500 truncate">{user?.email}</p>
                 </div>
                 <div className="py-2">
-                  <NavLink to="/settings" className="w-full flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 hover:text-neutral-900">
+                  <NavLink data-cursor-interactive to="/settings" className="w-full flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 hover:text-neutral-900">
                     <Settings className="h-4 w-4" />
                     Settings
                   </NavLink>
-                  <button className="w-full flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 hover:text-neutral-900">
+                  <button data-cursor-interactive className="w-full flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 hover:text-neutral-900">
                     <HelpCircle className="h-4 w-4" />
                     Help & Support
                   </button>
                   <hr className="my-2 border-neutral-100" />
                   <button 
+                    data-cursor-interactive
                     onClick={signOut}
                     className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
                   >
