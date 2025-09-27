@@ -11,12 +11,12 @@ interface StatCardProps {
   change: string;
   trend: 'up' | 'down';
   icon: LucideIcon | React.FC<any>;
-  color: 'blue' | 'purple' | 'teal' | 'green' | 'yellow' | 'red';
+  color: 'blue' | 'pink' | 'teal' | 'green' | 'yellow' | 'red';
 }
 
 const colorClasses = {
-  blue: { bg: 'bg-blue-100', text: 'text-blue-600' },
-  purple: { bg: 'bg-purple-100', text: 'text-purple-600' },
+  blue: { bg: 'bg-primary-100', text: 'text-primary-600' },
+  pink: { bg: 'bg-accent-100', text: 'text-accent-600' },
   teal: { bg: 'bg-teal-100', text: 'text-teal-600' },
   green: { bg: 'bg-green-100', text: 'text-green-600' },
   yellow: { bg: 'bg-yellow-100', text: 'text-yellow-600' },
@@ -24,7 +24,7 @@ const colorClasses = {
 };
 
 const StatCard: React.FC<StatCardProps> = ({ title, value, prefix, suffix, change, trend, icon: Icon, color }) => {
-  const { bg, text } = colorClasses[color];
+  const { bg, text } = colorClasses[color] || colorClasses.blue;
 
   return (
     <motion.div 

@@ -28,8 +28,8 @@ const Sidebar: React.FC = () => {
   return (
     <div className="flex w-64 flex-col bg-white border-r border-neutral-200/80">
       <div className="flex items-center gap-3 p-6 h-16">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600">
-          <Leaf className="h-6 w-6 text-white" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 text-white">
+          <Leaf className="h-6 w-6" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-neutral-900">BiteWise</h1>
@@ -47,7 +47,7 @@ const Sidebar: React.FC = () => {
               <li key={item.name}>
                 <NavLink
                   to={item.href}
-                  className="relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 data-[active=true]:text-primary-700"
+                  className="relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 data-[active=true]:text-primary-700 data-[active=true]:font-semibold"
                 >
                   {({ isActive }) => (
                     <>
@@ -74,7 +74,7 @@ const Sidebar: React.FC = () => {
           <li>
             <NavLink
               to="/settings"
-              className="relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 data-[active=true]:text-primary-700"
+              className="relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 data-[active=true]:text-primary-700 data-[active=true]:font-semibold"
             >
               {({ isActive }) => (
                 <>

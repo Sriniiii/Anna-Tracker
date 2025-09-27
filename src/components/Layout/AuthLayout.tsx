@@ -1,13 +1,15 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Leaf } from 'lucide-react';
+import LiveCursor from '../UI/LiveCursor';
 
 const AuthLayout: React.FC = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
+       <LiveCursor />
       <div className="w-full max-w-md">
         <div className="mb-8 flex flex-col items-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-500 mb-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-accent-500 mb-4">
             <Leaf className="h-8 w-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900">BiteWise</h1>
