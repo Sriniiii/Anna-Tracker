@@ -29,8 +29,8 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, prefix, suffix, chang
   return (
     <motion.div 
       className="card"
-      whileHover={{ y: -5, boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)' }}
-      transition={{ type: 'spring', stiffness: 300 }}
+      whileHover={{ y: -6, boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)' }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
     >
       <div className="flex items-start justify-between">
         <div className={`rounded-lg p-3 ${bg}`}>

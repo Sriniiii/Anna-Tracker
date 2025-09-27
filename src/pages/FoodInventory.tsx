@@ -164,7 +164,12 @@ const FoodInventory: React.FC = () => {
                   animate="visible"
                 >
                   {filteredInventory.map((item) => (
-                    <motion.tr key={item.id} variants={tableRowVariants} className="hover:bg-gray-50 transition-colors">
+                    <motion.tr 
+                      key={item.id} 
+                      variants={tableRowVariants} 
+                      className="transition-colors"
+                      whileHover={{ backgroundColor: '#f0fdfa' /* primary-50 */ }}
+                    >
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.name}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">{item.category}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.quantity} {item.unit}</td>
@@ -172,8 +177,8 @@ const FoodInventory: React.FC = () => {
                       <td className="px-6 py-4 whitespace-nowrap"><ExpiryStatus date={item.expiration_date} /></td>
                       {profile?.role === 'admin' && <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.profiles?.email || 'N/A'}</td>}
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-primary-600 hover:text-primary-900 p-1 rounded-md hover:bg-primary-50"><Edit className="h-4 w-4" /></button>
-                        <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-50 ml-2"><Trash2 className="h-4 w-4" /></button>
+                        <button className="text-primary-600 hover:text-primary-900 p-1 rounded-md hover:bg-primary-100 transition-colors"><Edit className="h-4 w-4" /></button>
+                        <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-100 transition-colors ml-2"><Trash2 className="h-4 w-4" /></button>
                       </td>
                     </motion.tr>
                   ))}

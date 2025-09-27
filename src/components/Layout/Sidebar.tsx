@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { 
   LayoutDashboard, 
   Package, 
@@ -46,16 +47,21 @@ const Sidebar: React.FC = () => {
               <li key={item.name}>
                 <NavLink
                   to={item.href}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                      isActive
-                        ? 'bg-primary-50 text-primary-700'
-                        : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900'
-                    }`
-                  }
+                  className="relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 data-[active=true]:text-primary-700"
                 >
-                  <item.icon className="h-5 w-5" />
-                  {item.name}
+                  {({ isActive }) => (
+                    <>
+                      {isActive && (
+                        <motion.div
+                          layoutId="active-sidebar-link"
+                          className="absolute inset-0 rounded-lg bg-primary-50"
+                          transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                        />
+                      )}
+                      <item.icon className="h-5 w-5 relative" />
+                      <span className="relative">{item.name}</span>
+                    </>
+                  )}
                 </NavLink>
               </li>
             );
@@ -68,16 +74,21 @@ const Sidebar: React.FC = () => {
           <li>
             <NavLink
               to="/settings"
-              className={({ isActive }) =>
-                `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'bg-primary-50 text-primary-700'
-                    : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900'
-                }`
-              }
+              className="relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 data-[active=true]:text-primary-700"
             >
-              <Settings className="h-5 w-5" />
-              Settings
+              {({ isActive }) => (
+                <>
+                   {isActive && (
+                    <motion.div
+                      layoutId="active-sidebar-link"
+                      className="absolute inset-0 rounded-lg bg-primary-50"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <Settings className="h-5 w-5 relative" />
+                  <span className="relative">Settings</span>
+                </>
+              )}
             </NavLink>
           </li>
         </ul>

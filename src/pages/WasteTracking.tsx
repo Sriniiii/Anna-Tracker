@@ -134,7 +134,12 @@ const WasteTracking: React.FC = () => {
                   animate="visible"
                 >
                   {wasteLogs.map((log) => (
-                    <motion.tr key={log.id} variants={tableRowVariants}>
+                    <motion.tr 
+                      key={log.id} 
+                      variants={tableRowVariants}
+                      className="transition-colors"
+                      whileHover={{ backgroundColor: '#f0fdfa' /* primary-50 */ }}
+                    >
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{log.item_name}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">{log.category}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{log.quantity} {log.unit}</td>
@@ -142,8 +147,8 @@ const WasteTracking: React.FC = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{format(new Date(log.waste_date), 'MMM dd, yyyy')}</td>
                       {profile?.role === 'admin' && <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{log.profiles?.email || 'N/A'}</td>}
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-primary-600 hover:text-primary-900 mr-4"><Edit className="h-4 w-4" /></button>
-                        <button onClick={() => handleDelete(log.id)} className="text-red-600 hover:text-red-900"><Trash2 className="h-4 w-4" /></button>
+                        <button className="text-primary-600 hover:text-primary-900 p-1 rounded-md hover:bg-primary-100 transition-colors mr-4"><Edit className="h-4 w-4" /></button>
+                        <button onClick={() => handleDelete(log.id)} className="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-100 transition-colors"><Trash2 className="h-4 w-4" /></button>
                       </td>
                     </motion.tr>
                   ))}

@@ -7,6 +7,8 @@ import { formatDistanceToNow } from 'date-fns';
 import { NavLink } from 'react-router-dom';
 import { faker } from '@faker-js/faker';
 
+const springTransition = { type: 'spring', stiffness: 500, damping: 30 };
+
 const Header: React.FC = () => {
   const { user, profile, signOut } = useAuth();
   const [showNotifications, setShowNotifications] = useState(false);
@@ -47,7 +49,7 @@ const Header: React.FC = () => {
             placeholder="Search..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-64 rounded-lg border-neutral-300 py-2 pl-10 pr-4 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+            className="w-64 rounded-lg border-neutral-300 py-2 pl-10 pr-4 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
           />
         </form>
       </div>
@@ -72,6 +74,7 @@ const Header: React.FC = () => {
                 initial={{ opacity: 0, scale: 0.95, y: -10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                transition={springTransition}
                 className="absolute right-0 top-full mt-2 w-80 rounded-lg bg-white shadow-strong border border-neutral-200 z-50"
               >
                 <div className="p-4 border-b border-neutral-200">
@@ -134,6 +137,7 @@ const Header: React.FC = () => {
                 initial={{ opacity: 0, scale: 0.95, y: -10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                transition={springTransition}
                 className="absolute right-0 top-full mt-2 w-56 rounded-lg bg-white shadow-strong border border-neutral-200 z-50"
               >
                 <div className="p-3 border-b border-neutral-200">

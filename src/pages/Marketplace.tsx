@@ -6,6 +6,7 @@ import Toast from '../components/UI/Toast';
 import { MarketplaceListing } from '../types/database';
 import AddListingModal from '../components/Modals/AddListingModal';
 import { faker } from '@faker-js/faker';
+import AnimatedButton from '../components/UI/AnimatedButton';
 
 const containerVariants = {
   hidden: { opacity: 1 },
@@ -172,13 +173,14 @@ const Marketplace: React.FC = () => {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
+                    whileHover={{ y: -5, boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)' }}
                     transition={{ type: 'spring', stiffness: 260, damping: 20 }}
                     className="card overflow-hidden p-0 flex flex-col group"
                   >
                     <div className="relative">
-                      <div className="overflow-hidden">
+                      <div className="overflow-hidden rounded-t-xl">
                         <motion.img
-                          src={listing.image_url || 'https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://placehold.co/400x300.png?text=No+Image'}
+                          src={listing.image_url || 'https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://placehold.co/400x300.png?text=No+Image'}
                           alt={listing.title}
                           className="w-full h-48 object-cover"
                           whileHover={{ scale: 1.05 }}
@@ -226,13 +228,7 @@ const Marketplace: React.FC = () => {
                       </div>
                       
                       <div className="mt-auto">
-                        <button
-                          onClick={() => handleAddToCart(listing)}
-                          className="btn-primary w-full flex items-center justify-center gap-2 text-sm"
-                        >
-                          <ShoppingCart className="h-4 w-4" />
-                          Add to Cart
-                        </button>
+                        <AnimatedButton onClick={() => handleAddToCart(listing)} />
                       </div>
                     </div>
                   </motion.div>

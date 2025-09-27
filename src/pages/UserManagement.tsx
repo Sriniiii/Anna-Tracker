@@ -144,7 +144,12 @@ const UserManagement: React.FC = () => {
                   animate="visible"
                 >
                   {filteredUsers.map((user) => (
-                    <motion.tr key={user.id} variants={tableRowVariants}>
+                    <motion.tr 
+                      key={user.id} 
+                      variants={tableRowVariants}
+                      className="transition-colors"
+                      whileHover={{ backgroundColor: '#f0fdfa' /* primary-50 */ }}
+                    >
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-3">
                           <img className="h-10 w-10 rounded-full" src={user.avatar_url || `https://ui-avatars.com/api/?name=${user.full_name || user.email}&background=random`} alt={user.full_name || ''} />
@@ -157,8 +162,8 @@ const UserManagement: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{format(new Date(user.updated_at), 'MMM dd, yyyy')}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button onClick={() => handleAction('Edit', user.full_name)} className="text-primary-600 hover:text-primary-900 mr-4"><Edit className="h-4 w-4" /></button>
-                        <button onClick={() => handleAction('Delete', user.full_name)} className="text-red-600 hover:text-red-900"><Trash2 className="h-4 w-4" /></button>
+                        <button onClick={() => handleAction('Edit', user.full_name)} className="text-primary-600 hover:text-primary-900 p-1 rounded-md hover:bg-primary-100 transition-colors mr-4"><Edit className="h-4 w-4" /></button>
+                        <button onClick={() => handleAction('Delete', user.full_name)} className="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-100 transition-colors"><Trash2 className="h-4 w-4" /></button>
                       </td>
                     </motion.tr>
                   ))}
