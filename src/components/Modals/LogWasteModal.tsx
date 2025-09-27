@@ -65,7 +65,7 @@ const LogWasteModal: React.FC<LogWasteModalProps> = ({ isOpen, onClose, onSucces
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
               Item Name
             </label>
             <input
@@ -80,7 +80,7 @@ const LogWasteModal: React.FC<LogWasteModalProps> = ({ isOpen, onClose, onSucces
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
               Category
             </label>
             <select
@@ -101,7 +101,7 @@ const LogWasteModal: React.FC<LogWasteModalProps> = ({ isOpen, onClose, onSucces
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
               Quantity Wasted
             </label>
             <div className="relative">
@@ -121,7 +121,7 @@ const LogWasteModal: React.FC<LogWasteModalProps> = ({ isOpen, onClose, onSucces
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
               Unit
             </label>
             <select
@@ -141,7 +141,7 @@ const LogWasteModal: React.FC<LogWasteModalProps> = ({ isOpen, onClose, onSucces
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
               Reason for Waste
             </label>
             <div className="relative">
@@ -165,7 +165,7 @@ const LogWasteModal: React.FC<LogWasteModalProps> = ({ isOpen, onClose, onSucces
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
               Date
             </label>
             <div className="relative">
@@ -183,7 +183,7 @@ const LogWasteModal: React.FC<LogWasteModalProps> = ({ isOpen, onClose, onSucces
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             Additional Notes
           </label>
           <textarea
@@ -196,7 +196,7 @@ const LogWasteModal: React.FC<LogWasteModalProps> = ({ isOpen, onClose, onSucces
           />
         </div>
 
-        <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
+        <div className="flex justify-end gap-3 pt-6 border-t border-surface-border">
           <button
             type="button"
             onClick={onClose}

@@ -10,44 +10,32 @@
   }
   
   body {
-    @apply bg-neutral-50 text-neutral-700;
+    @apply bg-background text-text-secondary;
   }
 }
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center rounded-lg px-4 h-10 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 transform active:scale-95;
+    @apply inline-flex items-center justify-center rounded-lg px-4 h-10 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background disabled:pointer-events-none disabled:opacity-60 transform active:scale-95;
   }
   
   .btn-primary {
-    @apply btn bg-gradient-to-r from-primary-500 to-primary-600 text-white hover:from-primary-600 hover:to-primary-700 focus:ring-primary-500 shadow-sm hover:shadow-md;
-    background-size: 200% auto;
-    transition: background-position 0.5s ease;
-  }
-
-  .btn-primary:hover {
-    background-position: right center;
+    @apply btn bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500 shadow-soft hover:shadow-medium;
   }
   
   .btn-secondary {
-    @apply btn bg-neutral-200 text-neutral-800 hover:bg-neutral-300 focus:ring-neutral-400;
+    @apply btn bg-surface text-text-primary border border-surface-border hover:bg-slate-50 focus:ring-slate-400;
   }
   
   .btn-outline {
-    @apply btn border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 focus:ring-primary-500;
+    @apply btn border border-surface-border bg-transparent text-text-primary hover:bg-slate-50 focus:ring-primary-500;
   }
   
   .card {
-    @apply rounded-xl bg-white/90 backdrop-blur-sm p-6 border border-neutral-200/80 shadow-soft;
+    @apply rounded-xl bg-surface p-6 border border-surface-border shadow-soft;
   }
   
   .input {
-    @apply block w-full rounded-lg border-neutral-300 h-10 px-4 text-sm placeholder-neutral-400 shadow-sm transition-all duration-200 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 hover:border-neutral-400 focus:shadow-md;
-  }
-}
-
-@layer utilities {
-  .glassmorphic {
-    @apply bg-white/80 backdrop-blur-lg;
+    @apply block w-full rounded-lg border-surface-border bg-surface h-10 px-4 text-sm text-text-primary placeholder-text-secondary shadow-sm transition-all duration-200 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 hover:border-slate-300;
   }
 }

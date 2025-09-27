@@ -35,15 +35,15 @@ const SignUp: React.FC = () => {
     <>
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Create an Account</h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <h2 className="text-2xl font-bold text-text-primary">Create an Account</h2>
+          <p className="mt-2 text-sm text-text-secondary">
             Join BiteWise to start managing food waste effectively.
           </p>
         </div>
 
         <form onSubmit={handleSignUp} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
               Email Address
             </label>
             <div className="relative">
@@ -60,7 +60,7 @@ const SignUp: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
               Password
             </label>
             <div className="relative">
@@ -91,7 +91,7 @@ const SignUp: React.FC = () => {
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-600">
+        <p className="text-center text-sm text-text-secondary">
           Already have an account?{' '}
           <Link to="/signin" className="font-medium text-primary-600 hover:text-primary-500">
             Sign in

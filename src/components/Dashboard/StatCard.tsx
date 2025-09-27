@@ -1,6 +1,5 @@
 import React from 'react';
 import { type LucideIcon } from 'lucide-react';
-import { motion } from 'framer-motion';
 import AnimatedNumber from '../UI/AnimatedNumber';
 
 interface StatCardProps {
@@ -9,42 +8,36 @@ interface StatCardProps {
   prefix?: string;
   suffix?: string;
   icon: LucideIcon | React.FC<any>;
-  color: 'blue' | 'pink' | 'teal' | 'green' | 'yellow' | 'red';
+  color: 'blue' | 'green' | 'teal' | 'pink';
 }
 
 const colorClasses = {
-  blue: { bg: 'bg-primary-100', text: 'text-primary-600' },
-  pink: { bg: 'bg-accent-100', text: 'text-accent-600' },
-  teal: { bg: 'bg-teal-100', text: 'text-teal-600' },
+  blue: { bg: 'bg-blue-100', text: 'text-blue-600' },
   green: { bg: 'bg-green-100', text: 'text-green-600' },
-  yellow: { bg: 'bg-yellow-100', text: 'text-yellow-600' },
-  red: { bg: 'bg-red-100', text: 'text-red-600' },
+  teal: { bg: 'bg-teal-100', text: 'text-teal-600' },
+  pink: { bg: 'bg-pink-100', text: 'text-pink-600' },
 };
 
 const StatCard: React.FC<StatCardProps> = ({ title, value, prefix, suffix, icon: Icon, color }) => {
   const { bg, text } = colorClasses[color] || colorClasses.blue;
 
   return (
-    <motion.div 
-      className="card"
-      whileHover={{ y: -6, boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)' }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-    >
+    <div className="card p-5 h-full">
       <div className="flex items-start justify-between">
         <div className={`rounded-lg p-3 ${bg}`}>
           <Icon className={`h-6 w-6 ${text}`} />
         </div>
       </div>
-      <div className="mt-8">
-        <p className="text-sm font-medium text-neutral-600">{title}</p>
+      <div className="mt-4">
+        <p className="text-sm font-medium text-text-secondary">{title}</p>
         <AnimatedNumber 
           value={value}
           prefix={prefix}
           suffix={suffix}
-          className="text-2xl font-bold text-neutral-900"
+          className="text-2xl font-bold text-text-primary"
         />
       </div>
-    </motion.div>
+    </div>
   );
 };
 

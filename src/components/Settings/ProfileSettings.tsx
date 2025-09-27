@@ -49,8 +49,8 @@ const ProfileSettings: React.FC = () => {
   return (
     <>
       <div className="card">
-        <h2 className="text-xl font-semibold text-neutral-900 mb-1">Profile Information</h2>
-        <p className="text-neutral-600 mb-6">Update your personal details here.</p>
+        <h2 className="text-xl font-semibold text-text-primary mb-1">Profile Information</h2>
+        <p className="text-text-secondary mb-6">Update your personal details here.</p>
         
         <form onSubmit={handleUpdateProfile} className="space-y-6">
           <div className="flex items-center gap-4">
@@ -70,18 +70,18 @@ const ProfileSettings: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-neutral-700 mb-1">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-text-secondary mb-1">Email</label>
             <input
               id="email"
               type="email"
               value={user?.email || ''}
               disabled
-              className="input bg-neutral-100 cursor-not-allowed"
+              className="input bg-slate-100 cursor-not-allowed"
             />
           </div>
 
           <div>
-            <label htmlFor="fullName" className="block text-sm font-medium text-neutral-700 mb-1">Full Name</label>
+            <label htmlFor="fullName" className="block text-sm font-medium text-text-secondary mb-1">Full Name</label>
             <input
               id="fullName"
               type="text"
@@ -92,7 +92,7 @@ const ProfileSettings: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-neutral-700 mb-1">Username</label>
+            <label htmlFor="username" className="block text-sm font-medium text-text-secondary mb-1">Username</label>
             <input
               id="username"
               type="text"
@@ -103,7 +103,7 @@ const ProfileSettings: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="website" className="block text-sm font-medium text-neutral-700 mb-1">Website</label>
+            <label htmlFor="website" className="block text-sm font-medium text-text-secondary mb-1">Website</label>
             <input
               id="website"
               type="url"
@@ -114,7 +114,7 @@ const ProfileSettings: React.FC = () => {
             />
           </div>
 
-          <div className="flex justify-end pt-4 border-t border-neutral-200">
+          <div className="flex justify-end pt-4 border-t border-surface-border">
             <button type="submit" className="btn-primary" disabled={loading}>
               {loading ? 'Saving...' : 'Save Changes'}
             </button>

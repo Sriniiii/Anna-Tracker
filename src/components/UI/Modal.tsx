@@ -26,7 +26,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, size = 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black bg-opacity-60"
+            className="absolute inset-0 bg-black bg-opacity-50"
             onClick={onClose}
           />
           <motion.div
@@ -34,13 +34,13 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, size = 
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className={`relative w-full ${sizeClasses[size]} rounded-xl bg-white shadow-strong`}
+            className={`relative w-full ${sizeClasses[size]} rounded-xl bg-surface shadow-strong`}
           >
-            <div className="flex items-center justify-between border-b border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+            <div className="flex items-center justify-between border-b border-surface-border p-6">
+              <h2 className="text-xl font-semibold text-text-primary">{title}</h2>
               <button
                 onClick={onClose}
-                className="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
               >
                 <X className="h-5 w-5" />
               </button>

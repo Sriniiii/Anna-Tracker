@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Trash2, Leaf, ShoppingCart, CheckCircle } from 'lucide-react';
+import { Trash2, Leaf, ShoppingCart } from 'lucide-react';
 import StatCard from '../components/Dashboard/StatCard';
 import WasteChart from '../components/Dashboard/WasteChart';
 import RecentActivity from '../components/Dashboard/RecentActivity';
 import { faker } from '@faker-js/faker';
-import SpotlightCard from '../components/UI/SpotlightCard';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -39,7 +38,7 @@ const Dashboard: React.FC = () => {
       const activeListings = faker.number.int({ min: 5, max: 30 });
 
       setStats([
-        { title: 'Total Savings', value: totalSavings, prefix: '₹', suffix: '', icon: () => <span className="font-bold text-primary-600">₹</span>, color: 'blue' as const },
+        { title: 'Total Savings', value: totalSavings, prefix: '₹', suffix: '', icon: () => <span className="font-bold text-blue-600">₹</span>, color: 'blue' as const },
         { title: 'Waste Diverted', value: totalWasteDiverted, prefix: '', suffix: ' kg', icon: Trash2, color: 'green' as const },
         { title: 'CO2 Reduced', value: co2Reduced, prefix: '', suffix: ' kg', icon: Leaf, color: 'teal' as const },
         { title: 'Active Listings', value: activeListings, prefix: '', suffix: '', icon: ShoppingCart, color: 'pink' as const },
@@ -61,12 +60,8 @@ const Dashboard: React.FC = () => {
     >
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-neutral-900">Dashboard</h1>
-          <p className="text-neutral-600">Welcome back! Here's your food waste overview.</p>
-        </div>
-        <div className="flex items-center gap-2 text-sm text-neutral-500">
-          <CheckCircle className="h-4 w-4 text-success-500" />
-          <span>All systems operational</span>
+          <h1 className="text-3xl font-bold text-text-primary">Dashboard</h1>
+          <p className="text-text-secondary">Welcome back! Here's your food waste overview.</p>
         </div>
       </div>
 
@@ -79,15 +74,13 @@ const Dashboard: React.FC = () => {
         {loading ? (
           [...Array(4)].map((_, index) => (
             <div key={index} className="card animate-pulse h-[138px]">
-              <div className="h-full bg-neutral-200 rounded-md"></div>
+              <div className="h-full bg-slate-200 rounded-md"></div>
             </div>
           ))
         ) : (
           stats.map((stat) => (
             <motion.div key={stat.title} variants={itemVariants}>
-              <SpotlightCard>
-                <StatCard {...stat} />
-              </SpotlightCard>
+              <StatCard {...stat} />
             </motion.div>
           ))
         )}
@@ -95,14 +88,10 @@ const Dashboard: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <SpotlightCard>
-            <WasteChart />
-          </SpotlightCard>
+          <WasteChart />
         </div>
         <div className="lg:col-span-1">
-          <SpotlightCard>
-            <RecentActivity />
-          </SpotlightCard>
+          <RecentActivity />
         </div>
       </div>
     </motion.div>

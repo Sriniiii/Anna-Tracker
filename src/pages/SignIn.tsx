@@ -33,15 +33,15 @@ const SignIn: React.FC = () => {
     <>
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Sign In</h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <h2 className="text-2xl font-bold text-text-primary">Sign In</h2>
+          <p className="mt-2 text-sm text-text-secondary">
             Welcome back! Please enter your details.
           </p>
         </div>
 
         <form onSubmit={handleSignIn} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
               Email Address
             </label>
             <div className="relative">
@@ -58,7 +58,7 @@ const SignIn: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
               Password
             </label>
             <div className="relative">
@@ -88,7 +88,7 @@ const SignIn: React.FC = () => {
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-600">
+        <p className="text-center text-sm text-text-secondary">
           Don't have an account?{' '}
           <Link to="/signup" className="font-medium text-primary-600 hover:text-primary-500">
             Sign up

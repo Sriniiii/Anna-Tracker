@@ -36,12 +36,12 @@ const PasswordSettings: React.FC = () => {
   return (
     <>
       <div className="card">
-        <h2 className="text-xl font-semibold text-neutral-900 mb-1">Change Password</h2>
-        <p className="text-neutral-600 mb-6">Update your password. Make sure it's a strong one!</p>
+        <h2 className="text-xl font-semibold text-text-primary mb-1">Change Password</h2>
+        <p className="text-text-secondary mb-6">Update your password. Make sure it's a strong one!</p>
         
         <form onSubmit={handlePasswordUpdate} className="space-y-6">
           <div>
-            <label htmlFor="newPassword" className="block text-sm font-medium text-neutral-700 mb-1">New Password</label>
+            <label htmlFor="newPassword" className="block text-sm font-medium text-text-secondary mb-1">New Password</label>
             <input
               id="newPassword"
               type="password"
@@ -54,7 +54,7 @@ const PasswordSettings: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-neutral-700 mb-1">Confirm New Password</label>
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-text-secondary mb-1">Confirm New Password</label>
             <input
               id="confirmPassword"
               type="password"
@@ -66,7 +66,7 @@ const PasswordSettings: React.FC = () => {
             />
           </div>
 
-          <div className="flex justify-end pt-4 border-t border-neutral-200">
+          <div className="flex justify-end pt-4 border-t border-surface-border">
             <button type="submit" className="btn-primary" disabled={loading}>
               {loading ? 'Updating...' : 'Update Password'}
             </button>

@@ -31,8 +31,8 @@ const Settings: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-neutral-900">Settings</h1>
-        <p className="text-neutral-600">Manage your account settings and preferences.</p>
+        <h1 className="text-3xl font-bold text-text-primary">Settings</h1>
+        <p className="text-text-secondary">Manage your account settings and preferences.</p>
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -45,7 +45,7 @@ const Settings: React.FC = () => {
                 className={`w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                   activeTab === tab.id
                     ? 'bg-primary-100 text-primary-600 font-semibold'
-                    : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900'
+                    : 'text-text-secondary hover:bg-slate-100 hover:text-text-primary'
                 }`}
               >
                 <tab.icon className="h-5 w-5" />

@@ -69,12 +69,12 @@ const Analytics: React.FC = () => {
   }, []);
 
   const categoryColors: { [key: string]: string } = {
-    produce: 'bg-success-500',
-    dairy: 'bg-primary-500',
-    bakery: 'bg-secondary-500',
-    meat: 'bg-accent-500',
+    produce: 'bg-green-500',
+    dairy: 'bg-blue-500',
+    bakery: 'bg-orange-500',
+    meat: 'bg-red-500',
     pantry: 'bg-yellow-500',
-    frozen: 'bg-blue-500'
+    frozen: 'bg-sky-500'
   };
 
   return (
@@ -86,11 +86,11 @@ const Analytics: React.FC = () => {
     >
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Analytics Dashboard</h1>
-          <p className="text-gray-600">Comprehensive insights into your food waste management performance.</p>
+          <h1 className="text-3xl font-bold text-text-primary">Analytics Dashboard</h1>
+          <p className="text-text-secondary">Comprehensive insights into your food waste management performance.</p>
         </div>
         <div className="flex items-center gap-3">
-          <select className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500">
+          <select className="input !h-10 !w-auto">
             <option>Last 30 days</option>
             <option>Last 3 months</option>
             <option>Last year</option>
@@ -109,7 +109,7 @@ const Analytics: React.FC = () => {
         animate="visible"
       >
         {loading ? [...Array(4)].map((_, i) => (
-          <div key={i} className="card h-36 animate-pulse bg-gray-100"></div>
+          <div key={i} className="card h-36 animate-pulse bg-slate-100"></div>
         )) : metrics.map((metric) => (
           <motion.div
             key={metric.title}
@@ -118,12 +118,12 @@ const Analytics: React.FC = () => {
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">{metric.title}</p>
+                <p className="text-sm font-medium text-text-secondary">{metric.title}</p>
                 <AnimatedNumber
                   value={metric.value}
                   prefix={metric.prefix}
                   suffix={metric.suffix}
-                  className="text-2xl font-bold text-gray-900"
+                  className="text-2xl font-bold text-text-primary"
                 />
               </div>
               <div className={`flex items-center justify-center rounded-lg p-3 h-12 w-12 ${metric.color.replace('text-', 'bg-').replace('-500', '-100')}`}>
@@ -137,8 +137,8 @@ const Analytics: React.FC = () => {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="card">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Waste by Category</h3>
-          {loading ? <div className="h-64 animate-pulse bg-gray-100 rounded-lg"></div> :
+          <h3 className="text-lg font-semibold text-text-primary mb-6">Waste by Category</h3>
+          {loading ? <div className="h-64 animate-pulse bg-slate-100 rounded-lg"></div> :
             wasteByCategory.length > 0 ? (
               <div className="space-y-4">
                 {wasteByCategory.map((item, index) => (
@@ -146,14 +146,14 @@ const Analytics: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className={`h-3 w-3 rounded-full ${item.color}`} />
-                        <span className="text-sm font-medium text-gray-900 capitalize">{item.category}</span>
+                        <span className="text-sm font-medium text-text-primary capitalize">{item.category}</span>
                       </div>
                       <div className="text-right">
-                        <span className="text-sm font-medium text-gray-900">{item.percentage.toFixed(1)}%</span>
-                        <span className="block text-xs text-gray-500">{item.amount}</span>
+                        <span className="text-sm font-medium text-text-primary">{item.percentage.toFixed(1)}%</span>
+                        <span className="block text-xs text-text-secondary">{item.amount}</span>
                       </div>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-slate-200 rounded-full h-2">
                       <motion.div
                         className={`h-2 rounded-full ${item.color}`}
                         initial={{ width: 0 }}
@@ -166,20 +166,20 @@ const Analytics: React.FC = () => {
               </div>
             ) : (
               <div className="text-center py-16">
-                <PieChart className="mx-auto h-12 w-12 text-gray-300" />
-                <h4 className="mt-2 text-sm font-medium text-gray-900">No Waste Data</h4>
-                <p className="mt-1 text-sm text-gray-500">Log waste to see category breakdowns.</p>
+                <PieChart className="mx-auto h-12 w-12 text-slate-300" />
+                <h4 className="mt-2 text-sm font-medium text-text-primary">No Waste Data</h4>
+                <p className="mt-1 text-sm text-text-secondary">Log waste to see category breakdowns.</p>
               </div>
             )
           }
         </div>
 
         <div className="card">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Monthly Trends</h3>
-          <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
+          <h3 className="text-lg font-semibold text-text-primary mb-6">Monthly Trends</h3>
+          <div className="h-64 flex items-center justify-center bg-slate-50 rounded-lg">
             <div className="text-center">
-              <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-              <p className="text-gray-500">Interactive chart coming soon</p>
+              <BarChart3 className="h-12 w-12 text-slate-400 mx-auto mb-3" />
+              <p className="text-text-secondary">Interactive chart coming soon</p>
             </div>
           </div>
         </div>

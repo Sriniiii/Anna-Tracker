@@ -78,7 +78,7 @@ const AddListingModal: React.FC<AddListingModalProps> = ({ isOpen, onClose, onSu
         <textarea name="description" value={formData.description} onChange={handleChange} className="input" placeholder="Detailed description of the item" rows={3} required />
         <input name="image_url" value={formData.image_url} onChange={handleChange} className="input" placeholder="Image URL (optional)" />
         
-        <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+        <div className="flex justify-end gap-3 pt-4 border-t border-surface-border">
           <button type="button" onClick={onClose} className="btn-outline" disabled={loading}>Cancel</button>
           <button type="submit" className="btn-primary" disabled={loading}>{loading ? 'Posting...' : 'Post Listing'}</button>
         </div>

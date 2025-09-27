@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, MapPin, Clock, Heart, Plus } from 'lucide-react';
+import { Search, MapPin, Clock, Heart, Plus, ShoppingCart } from 'lucide-react';
 import { useToast } from '../hooks/useToast';
 import Toast from '../components/UI/Toast';
 import { MarketplaceListing } from '../types/database';
 import AddListingModal from '../components/Modals/AddListingModal';
 import { faker } from '@faker-js/faker';
-import AnimatedButton from '../components/UI/AnimatedButton';
-import SpotlightCard from '../components/UI/SpotlightCard';
 
 const containerVariants = {
   hidden: { opacity: 1 },
@@ -109,22 +107,21 @@ const Marketplace: React.FC = () => {
       >
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Food Bazaar</h1>
-            <p className="text-gray-600">Discover surplus food from local vendors at great prices.</p>
+            <h1 className="text-3xl font-bold text-text-primary">Food Bazaar</h1>
+            <p className="text-text-secondary">Discover surplus food from local vendors at great prices.</p>
           </div>
-          <button data-cursor-interactive onClick={() => setIsModalOpen(true)} className="btn-primary flex items-center gap-2">
+          <button onClick={() => setIsModalOpen(true)} className="btn-primary flex items-center gap-2">
             <Plus className="h-4 w-4" />
             Post Listing
           </button>
         </div>
 
-        <div className="sticky top-16 z-20 bg-neutral-50/80 backdrop-blur-sm py-4 -mx-6 px-6">
+        <div className="sticky top-16 z-20 bg-background/80 backdrop-blur-sm py-4 -mx-6 px-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="flex-1 max-w-md">
               <div className="relative">
                 <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                 <input
-                  data-cursor-interactive
                   type="text"
                   placeholder="Search for food, vegetables, etc..."
                   value={searchQuery}
@@ -137,7 +134,6 @@ const Marketplace: React.FC = () => {
             <div className="flex items-center gap-2 overflow-x-auto pb-2">
               {categories.map(category => (
                 <button
-                  data-cursor-interactive
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
                   className={`px-4 py-2 text-sm font-medium rounded-full transition-colors whitespace-nowrap ${
@@ -178,72 +174,75 @@ const Marketplace: React.FC = () => {
                     exit={{ opacity: 0, scale: 0.8 }}
                     transition={{ type: 'spring', stiffness: 260, damping: 20 }}
                   >
-                    <SpotlightCard className="h-full">
-                      <div className="card overflow-hidden p-0 flex flex-col group h-full">
-                        <div className="relative">
-                          <div className="overflow-hidden rounded-t-xl">
-                            <motion.img
-                              src={listing.image_url || 'https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://placehold.co/400x300.png?text=No+Image'}
-                              alt={listing.title}
-                              className="w-full h-48 object-cover"
-                              whileHover={{ scale: 1.05 }}
-                            />
-                          </div>
-                          <div className="absolute top-3 left-3">
-                            <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-                              {getDiscountPercentage(listing.original_price, listing.discounted_price)}% OFF
-                            </span>
-                          </div>
-                          <motion.button
-                            data-cursor-interactive
-                            onClick={() => toggleFavorite(listing.id)}
-                            className="absolute top-3 right-3 rounded-full bg-white/80 backdrop-blur-sm p-2 shadow-md hover:bg-white"
-                            whileHover={{ scale: 1.15 }}
-                            whileTap={{ scale: 0.9 }}
-                          >
-                            <Heart
-                              className={`h-4 w-4 transition-all ${
-                                favorites.includes(listing.id) 
-                                  ? 'fill-red-500 text-red-500' 
-                                  : 'text-gray-500'
-                              }`}
-                            />
-                          </motion.button>
+                    <div className="card overflow-hidden p-0 flex flex-col group h-full">
+                      <div className="relative">
+                        <div className="overflow-hidden rounded-t-xl">
+                          <motion.img
+                            src={listing.image_url || 'https://img-wrapper.vercel.app/image?url=https://placehold.co/400x300.png?text=No+Image'}
+                            alt={listing.title}
+                            className="w-full h-48 object-cover"
+                            whileHover={{ scale: 1.05 }}
+                          />
+                        </div>
+                        <div className="absolute top-3 left-3">
+                          <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                            {getDiscountPercentage(listing.original_price, listing.discounted_price)}% OFF
+                          </span>
+                        </div>
+                        <motion.button
+                          onClick={() => toggleFavorite(listing.id)}
+                          className="absolute top-3 right-3 rounded-full bg-white/80 backdrop-blur-sm p-2 shadow-md hover:bg-white"
+                          whileHover={{ scale: 1.15 }}
+                          whileTap={{ scale: 0.9 }}
+                        >
+                          <Heart
+                            className={`h-4 w-4 transition-all ${
+                              favorites.includes(listing.id) 
+                                ? 'fill-red-500 text-red-500' 
+                                : 'text-gray-500'
+                            }`}
+                          />
+                        </motion.button>
+                      </div>
+                      
+                      <div className="p-4 flex-grow flex flex-col">
+                        <h3 className="font-semibold text-text-primary truncate">{listing.title}</h3>
+                        <p className="text-sm text-text-secondary mb-3">{listing.vendor}</p>
+                        
+                        <div className="flex items-baseline gap-2 mb-3">
+                          <span className="text-xl font-bold text-text-primary">₹{listing.discounted_price.toFixed(0)}</span>
+                          <span className="text-sm text-text-secondary line-through">₹{listing.original_price.toFixed(0)}</span>
                         </div>
                         
-                        <div className="p-4 flex-grow flex flex-col">
-                          <h3 className="font-semibold text-gray-900 truncate">{listing.title}</h3>
-                          <p className="text-sm text-gray-500 mb-3">{listing.vendor}</p>
-                          
-                          <div className="flex items-baseline gap-2 mb-3">
-                            <span className="text-xl font-bold text-gray-900">₹{listing.discounted_price.toFixed(0)}</span>
-                            <span className="text-sm text-gray-500 line-through">₹{listing.original_price.toFixed(0)}</span>
+                        <div className="flex items-center gap-4 text-xs text-text-secondary mb-4">
+                          <div className="flex items-center gap-1">
+                            <MapPin className="h-3 w-3" />
+                            <span>{listing.location}</span>
                           </div>
-                          
-                          <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
-                            <div className="flex items-center gap-1">
-                              <MapPin className="h-3 w-3" />
-                              <span>{listing.location}</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
-                              <span>{listing.expires_in}</span>
-                            </div>
-                          </div>
-                          
-                          <div className="mt-auto">
-                            <AnimatedButton onClick={() => handleAddToCart(listing)} />
+                          <div className="flex items-center gap-1">
+                            <Clock className="h-3 w-3" />
+                            <span>{listing.expires_in}</span>
                           </div>
                         </div>
+                        
+                        <div className="mt-auto">
+                          <button
+                            onClick={() => handleAddToCart(listing)}
+                            className="btn-primary w-full flex items-center justify-center gap-2"
+                          >
+                            <ShoppingCart className="h-4 w-4" />
+                            Add to Cart
+                          </button>
+                        </div>
                       </div>
-                    </SpotlightCard>
+                    </div>
                   </motion.div>
                 ))
               ) : (
                 <motion.div initial={{opacity: 0}} animate={{opacity: 1}} className="text-center py-16 col-span-full">
                   <Search className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No items found</h3>
-                  <p className="text-gray-600">Try adjusting your search or filters to find what you're looking for.</p>
+                  <h3 className="text-lg font-medium text-text-primary mb-2">No items found</h3>
+                  <p className="text-text-secondary">Try adjusting your search or filters to find what you're looking for.</p>
                 </motion.div>
               )}
             </AnimatePresence>

@@ -82,8 +82,8 @@ const UserManagement: React.FC = () => {
       >
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">User Management</h1>
-            <p className="text-gray-600">View, edit, and manage all users in the system.</p>
+            <h1 className="text-3xl font-bold text-text-primary">User Management</h1>
+            <p className="text-text-secondary">View, edit, and manage all users in the system.</p>
           </div>
           <button onClick={() => handleAction('Add', '')} className="btn-primary flex items-center gap-2 w-full md:w-auto">
             <UserPlus className="h-4 w-4" />
@@ -117,28 +117,28 @@ const UserManagement: React.FC = () => {
           {loading ? (
             <div className="text-center py-8">
               <div className="h-12 w-12 mx-auto animate-spin rounded-full border-4 border-primary-500 border-t-transparent"></div>
-              <p className="mt-4 text-gray-500">Loading users...</p>
+              <p className="mt-4 text-text-secondary">Loading users...</p>
             </div>
           ) : filteredUsers.length === 0 ? (
             <div className="text-center py-12">
-              <User className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No users found</h3>
-              <p className="text-gray-600">No users match your current search and filter criteria.</p>
+              <User className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-text-primary mb-2">No users found</h3>
+              <p className="text-text-secondary">No users match your current search and filter criteria.</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-surface-border">
+                <thead className="bg-slate-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined Date</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">User</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">Email</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">Role</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">Joined Date</th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-text-secondary uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
                 <motion.tbody 
-                  className="bg-white divide-y divide-gray-200"
+                  className="bg-surface divide-y divide-surface-border"
                   variants={tableContainerVariants}
                   initial="hidden"
                   animate="visible"
@@ -148,19 +148,19 @@ const UserManagement: React.FC = () => {
                       key={user.id} 
                       variants={tableRowVariants}
                       className="transition-colors"
-                      whileHover={{ backgroundColor: '#f0fdfa' /* primary-50 */ }}
+                      whileHover={{ backgroundColor: '#f8fafc' /* slate-50 */ }}
                     >
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-3">
                           <img className="h-10 w-10 rounded-full" src={user.avatar_url || `https://ui-avatars.com/api/?name=${user.full_name || user.email}&background=random`} alt={user.full_name || ''} />
-                          <div className="text-sm font-medium text-gray-900">{user.full_name || 'N/A'}</div>
+                          <div className="text-sm font-medium text-text-primary">{user.full_name || 'N/A'}</div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.email}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">{user.email}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
                         <RoleBadge role={user.role} />
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{format(new Date(user.updated_at), 'MMM dd, yyyy')}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">{format(new Date(user.updated_at), 'MMM dd, yyyy')}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button onClick={() => handleAction('Edit', user.full_name)} className="text-primary-600 hover:text-primary-900 p-1 rounded-md hover:bg-primary-100 transition-colors mr-4"><Edit className="h-4 w-4" /></button>
                         <button onClick={() => handleAction('Delete', user.full_name)} className="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-100 transition-colors"><Trash2 className="h-4 w-4" /></button>

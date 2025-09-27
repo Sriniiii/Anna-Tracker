@@ -3,14 +3,14 @@ import React from 'react';
 const NotificationSettings: React.FC = () => {
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold text-neutral-900 mb-1">Notification Settings</h2>
-      <p className="text-neutral-600 mb-6">Manage how you receive notifications.</p>
+      <h2 className="text-xl font-semibold text-text-primary mb-1">Notification Settings</h2>
+      <p className="text-text-secondary mb-6">Manage how you receive notifications.</p>
       
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-medium text-neutral-800">Email Notifications</h3>
-            <p className="text-sm text-neutral-500">Receive notifications via email for important updates.</p>
+            <h3 className="font-medium text-text-primary">Email Notifications</h3>
+            <p className="text-sm text-text-secondary">Receive notifications via email for important updates.</p>
           </div>
           <label className="switch">
             <input type="checkbox" defaultChecked />
@@ -20,8 +20,8 @@ const NotificationSettings: React.FC = () => {
 
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-medium text-neutral-800">Push Notifications</h3>
-            <p className="text-sm text-neutral-500">Get real-time alerts on your device.</p>
+            <h3 className="font-medium text-text-primary">Push Notifications</h3>
+            <p className="text-sm text-text-secondary">Get real-time alerts on your device.</p>
           </div>
           <label className="switch">
             <input type="checkbox" />
@@ -31,8 +31,8 @@ const NotificationSettings: React.FC = () => {
 
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-medium text-neutral-800">Weekly Summary</h3>
-            <p className="text-sm text-neutral-500">Receive a weekly summary of your activity.</p>
+            <h3 className="font-medium text-text-primary">Weekly Summary</h3>
+            <p className="text-sm text-text-secondary">Receive a weekly summary of your activity.</p>
           </div>
           <label className="switch">
             <input type="checkbox" defaultChecked />
@@ -74,10 +74,10 @@ const NotificationSettings: React.FC = () => {
           transition: .4s;
         }
         input:checked + .slider {
-          background-color: #2563eb;
+          background-color: #3b82f6;
         }
         input:focus + .slider {
-          box-shadow: 0 0 1px #2563eb;
+          box-shadow: 0 0 1px #3b82f6;
         }
         input:checked + .slider:before {
           transform: translateX(16px);

@@ -57,14 +57,14 @@ const RecentActivity: React.FC = () => {
   if (loading) {
     return (
       <div className="card h-full">
-        <h3 className="mb-6 text-lg font-semibold text-neutral-900">Recent Activity</h3>
+        <h3 className="mb-6 text-lg font-semibold text-text-primary">Recent Activity</h3>
         <div className="space-y-4">
           {[...Array(4)].map((_, i) => (
             <div key={i} className="flex items-center gap-3 animate-pulse">
-              <div className="h-10 w-10 rounded-full bg-neutral-200"></div>
+              <div className="h-10 w-10 rounded-full bg-slate-200"></div>
               <div className="flex-1 space-y-2">
-                <div className="h-4 bg-neutral-200 rounded w-3/4"></div>
-                <div className="h-3 bg-neutral-200 rounded w-1/2"></div>
+                <div className="h-4 bg-slate-200 rounded w-3/4"></div>
+                <div className="h-3 bg-slate-200 rounded w-1/2"></div>
               </div>
             </div>
           ))}
@@ -76,7 +76,7 @@ const RecentActivity: React.FC = () => {
   return (
     <div className="card h-full">
       <div className="mb-6 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-neutral-900">Recent Activity</h3>
+        <h3 className="text-lg font-semibold text-text-primary">Recent Activity</h3>
         <button className="text-sm text-primary-600 hover:text-primary-700">View all</button>
       </div>
       <div className="space-y-4">
@@ -87,10 +87,10 @@ const RecentActivity: React.FC = () => {
                 <activity.icon className={`h-5 w-5 ${activity.iconColor}`} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-neutral-800">{activity.message}</p>
+                <p className="text-sm text-text-primary">{activity.message}</p>
                 <div className="flex items-center gap-1 mt-1">
-                  <Clock className="h-3 w-3 text-neutral-400" />
-                  <span className="text-xs text-neutral-500">
+                  <Clock className="h-3 w-3 text-slate-400" />
+                  <span className="text-xs text-slate-500">
                     {formatDistanceToNow(activity.timestamp, { addSuffix: true })}
                   </span>
                 </div>
@@ -99,9 +99,9 @@ const RecentActivity: React.FC = () => {
           ))
         ) : (
           <div className="text-center py-8 h-full flex flex-col justify-center">
-            <Clock className="mx-auto h-10 w-10 text-neutral-300" />
-            <h4 className="mt-2 text-sm font-medium text-neutral-900">No Recent Activity</h4>
-            <p className="mt-1 text-sm text-neutral-500">Add inventory or log waste to see activity here.</p>
+            <Clock className="mx-auto h-10 w-10 text-slate-300" />
+            <h4 className="mt-2 text-sm font-medium text-text-primary">No Recent Activity</h4>
+            <p className="mt-1 text-sm text-text-secondary">Add inventory or log waste to see activity here.</p>
           </div>
         )}
       </div>

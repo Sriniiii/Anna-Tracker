@@ -107,8 +107,8 @@ const FoodInventory: React.FC = () => {
       >
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Stock Inventory</h1>
-            <p className="text-gray-600">Manage your food stock and track expiration dates.</p>
+            <h1 className="text-3xl font-bold text-text-primary">Stock Inventory</h1>
+            <p className="text-text-secondary">Manage your food stock and track expiration dates.</p>
           </div>
           <button onClick={() => setIsModalOpen(true)} className="btn-primary flex items-center gap-2">
             <Plus className="h-4 w-4" />
@@ -132,33 +132,33 @@ const FoodInventory: React.FC = () => {
           {loading ? (
             <div className="text-center py-8">
               <div className="h-12 w-12 mx-auto animate-spin rounded-full border-4 border-primary-500 border-t-transparent"></div>
-              <p className="mt-4 text-gray-500">Loading inventory...</p>
+              <p className="mt-4 text-text-secondary">Loading inventory...</p>
             </div>
           ) : filteredInventory.length === 0 ? (
             <div className="text-center py-12">
-              <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No items found</h3>
-              <p className="text-gray-600 mb-4">Your inventory is empty or no items match your search.</p>
+              <Package className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-text-primary mb-2">No items found</h3>
+              <p className="text-text-secondary mb-4">Your inventory is empty or no items match your search.</p>
               <button onClick={() => setIsModalOpen(true)} className="btn-primary">
                 Add First Item
               </button>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-surface-border">
+                <thead className="bg-slate-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expires On</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    {profile?.role === 'admin' && <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">Category</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">Stock</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">Expires On</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">Status</th>
+                    {profile?.role === 'admin' && <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">User</th>}
                     <th className="relative px-6 py-3"><span className="sr-only">Actions</span></th>
                   </tr>
                 </thead>
                 <motion.tbody 
-                  className="bg-white divide-y divide-gray-200"
+                  className="bg-surface divide-y divide-surface-border"
                   variants={tableContainerVariants}
                   initial="hidden"
                   animate="visible"
@@ -168,14 +168,14 @@ const FoodInventory: React.FC = () => {
                       key={item.id} 
                       variants={tableRowVariants} 
                       className="transition-colors"
-                      whileHover={{ backgroundColor: '#f0fdfa' /* primary-50 */ }}
+                      whileHover={{ backgroundColor: '#f8fafc' /* slate-50 */ }}
                     >
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.name}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">{item.category}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.quantity} {item.unit}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{format(new Date(item.expiration_date), 'MMM dd, yyyy')}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">{item.name}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary capitalize">{item.category}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">{item.quantity} {item.unit}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">{format(new Date(item.expiration_date), 'MMM dd, yyyy')}</td>
                       <td className="px-6 py-4 whitespace-nowrap"><ExpiryStatus date={item.expiration_date} /></td>
-                      {profile?.role === 'admin' && <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.profiles?.email || 'N/A'}</td>}
+                      {profile?.role === 'admin' && <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">{item.profiles?.email || 'N/A'}</td>}
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button className="text-primary-600 hover:text-primary-900 p-1 rounded-md hover:bg-primary-100 transition-colors"><Edit className="h-4 w-4" /></button>
                         <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-100 transition-colors ml-2"><Trash2 className="h-4 w-4" /></button>
