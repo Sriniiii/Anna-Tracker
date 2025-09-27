@@ -1,80 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { useAuth } from '../../context/AuthContext';
-import { supabase } from '../../lib/supabaseClient';
-import { subMonths, format, startOfMonth, endOfMonth } from 'date-fns';
+import { subMonths, format } from 'date-fns';
+import { faker } from '@faker-js/faker';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 const WasteChart: React.FC = () => {
-  const { user } = useAuth();
   const [chartData, setChartData] = useState<any>({ labels: [], datasets: [] });
   const [loading, setLoading] = useState(true);
   const [timePeriod, setTimePeriod] = useState(12);
 
   useEffect(() => {
-    const fetchChartData = async () => {
-      if (!user) return;
-      setLoading(true);
+    setLoading(true);
 
-      const labels = [];
-      const wasteData = [];
-      const savedData = [];
+    const labels = [];
+    const wasteData = [];
+    const savedData = [];
 
-      for (let i = timePeriod - 1; i >= 0; i--) {
-        const date = subMonths(new Date(), i);
-        labels.push(format(date, 'MMM'));
+    for (let i = timePeriod - 1; i >= 0; i--) {
+      const date = subMonths(new Date(), i);
+      labels.push(format(date, 'MMM'));
+      wasteData.push(faker.number.int({ min: 50, max: 500 }));
+      savedData.push(faker.number.int({ min: 100, max: 750 }));
+    }
 
-        const startDate = startOfMonth(date).toISOString();
-        const endDate = endOfMonth(date).toISOString();
+    setChartData({
+      labels,
+      datasets: [
+        {
+          label: 'Waste Logged (kg)',
+          data: wasteData,
+          borderColor: '#ef4444',
+          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+          tension: 0.4,
+          fill: true,
+        },
+        {
+          label: 'Food Saved (kg)',
+          data: savedData,
+          borderColor: '#22c55e',
+          backgroundColor: 'rgba(34, 197, 94, 0.1)',
+          tension: 0.4,
+          fill: true,
+        },
+      ],
+    });
 
-        const { data: waste, error: wasteError } = await supabase
-          .from('waste_logs')
-          .select('quantity')
-          .gte('created_at', startDate)
-          .lte('created_at', endDate);
-        
-        const { data: saved, error: savedError } = await supabase
-          .from('inventory_items')
-          .select('quantity')
-          .gte('created_at', startDate)
-          .lte('created_at', endDate);
-
-        const totalWaste = waste?.reduce((sum, item) => sum + item.quantity, 0) || 0;
-        const totalSaved = saved?.reduce((sum, item) => sum + item.quantity, 0) || 0;
-        
-        wasteData.push(totalWaste);
-        savedData.push(totalSaved);
-      }
-
-      setChartData({
-        labels,
-        datasets: [
-          {
-            label: 'Waste Logged (lbs)',
-            data: wasteData,
-            borderColor: '#ef4444',
-            backgroundColor: 'rgba(239, 68, 68, 0.1)',
-            tension: 0.4,
-            fill: true,
-          },
-          {
-            label: 'Food Saved (lbs)',
-            data: savedData,
-            borderColor: '#22c55e',
-            backgroundColor: 'rgba(34, 197, 94, 0.1)',
-            tension: 0.4,
-            fill: true,
-          },
-        ],
-      });
-
-      setLoading(false);
-    };
-
-    fetchChartData();
-  }, [user, timePeriod]);
+    setLoading(false);
+  }, [timePeriod]);
 
   const options = {
     responsive: true,

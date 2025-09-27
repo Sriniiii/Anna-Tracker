@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Modal from '../UI/Modal';
-import { Calendar, Package, DollarSign } from 'lucide-react';
+import { Calendar, Package } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient';
 import { useAuth } from '../../context/AuthContext';
 
@@ -133,10 +133,9 @@ const AddInventoryModal: React.FC<AddInventoryModalProps> = ({ isOpen, onClose, 
               required
             >
               <option value="">Select unit</option>
-              <option value="lbs">Pounds (lbs)</option>
               <option value="kg">Kilograms (kg)</option>
+              <option value="grams">Grams (g)</option>
               <option value="pieces">Pieces</option>
-              <option value="gallons">Gallons</option>
               <option value="liters">Liters</option>
               <option value="boxes">Boxes</option>
             </select>
@@ -161,17 +160,16 @@ const AddInventoryModal: React.FC<AddInventoryModalProps> = ({ isOpen, onClose, 
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Purchase Price (Optional)
+              Purchase Price (₹, Optional)
             </label>
             <div className="relative">
-              <DollarSign className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <input
                 type="number"
                 name="purchase_price"
                 value={formData.purchase_price}
                 onChange={handleChange}
-                className="input pl-10"
-                placeholder="0.00"
+                className="input"
+                placeholder="₹0.00"
                 min="0"
                 step="0.01"
               />

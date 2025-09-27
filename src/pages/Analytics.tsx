@@ -1,66 +1,72 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, BarChart3, PieChart, Download, DollarSign, Leaf } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
-import { supabase } from '../lib/supabaseClient';
+import { TrendingUp, BarChart3, PieChart, Download, Leaf } from 'lucide-react';
+import { faker } from '@faker-js/faker';
+import AnimatedNumber from '../components/UI/AnimatedNumber';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+  },
+};
 
 const Analytics: React.FC = () => {
-  const { user } = useAuth();
   const [metrics, setMetrics] = useState<any[]>([]);
   const [wasteByCategory, setWasteByCategory] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchAnalyticsData = async () => {
-      if (!user) return;
-      setLoading(true);
+    setLoading(true);
 
-      try {
-        const [savingsData, wasteData, listingsData, categoryData] = await Promise.all([
-          supabase.from('marketplace_listings').select('original_price, discounted_price'),
-          supabase.from('waste_logs').select('quantity'),
-          supabase.from('marketplace_listings').select('id'),
-          supabase.from('waste_logs').select('category, quantity'),
-        ]);
+    try {
+      const totalSavings = faker.number.int({ min: 40000, max: 160000 });
+      const totalWasteDiverted = faker.number.float({ min: 25, max: 150, precision: 0.1 });
+      const co2Reduced = totalWasteDiverted * 2.5;
+      const itemsRedistributed = faker.number.int({ min: 50, max: 200 });
 
-        const totalSavings = savingsData.data?.reduce((acc, item) => acc + (item.original_price - item.discounted_price), 0) || 0;
-        const totalWasteDiverted = wasteData.data?.reduce((acc, item) => acc + item.quantity, 0) || 0;
-        const co2Reduced = totalWasteDiverted * 2.5;
-        const itemsRedistributed = listingsData.data?.length || 0;
+      setMetrics([
+        { title: 'Cost Savings', value: totalSavings, prefix: '₹', suffix: '', change: `+${faker.number.float({min: 1, max: 10, precision: 1})}%`, trend: 'up', color: 'text-primary-500', icon: () => <span className="font-bold">₹</span> },
+        { title: 'Waste Diverted', value: totalWasteDiverted, prefix: '', suffix: ' kg', change: `+${faker.number.float({min: 1, max: 10, precision: 1})}%`, trend: 'up', color: 'text-success-500', icon: TrendingUp },
+        { title: 'Items Redistributed', value: itemsRedistributed, prefix: '', suffix: '', change: `+${faker.number.int({min: 1, max: 10})}`, trend: 'up', color: 'text-accent-500', icon: BarChart3 },
+        { title: 'Carbon Footprint Reduced', value: co2Reduced, prefix: '', suffix: ' kg CO2e', change: `+${faker.number.float({min: 1, max: 10, precision: 1})}%`, trend: 'up', color: 'text-green-500', icon: Leaf },
+      ]);
 
-        setMetrics([
-          { title: 'Cost Savings', value: `$${totalSavings.toFixed(2)}`, change: '+0%', trend: 'up', color: 'text-primary-500', icon: DollarSign },
-          { title: 'Waste Diverted', value: `${totalWasteDiverted.toFixed(1)} lbs`, change: '+0%', trend: 'up', color: 'text-success-500', icon: TrendingUp },
-          { title: 'Items Redistributed', value: itemsRedistributed, change: '+0%', trend: 'up', color: 'text-accent-500', icon: BarChart3 },
-          { title: 'Carbon Footprint Reduced', value: `${co2Reduced.toFixed(1)} lbs CO2`, change: '+0%', trend: 'up', color: 'text-green-500', icon: Leaf },
-        ]);
+      const categoryMap: { [key: string]: number } = {};
+      const categories = ['produce', 'dairy', 'bakery', 'meat', 'pantry', 'frozen'];
+      categories.forEach(cat => {
+        categoryMap[cat] = faker.number.int({ min: 10, max: 100 });
+      });
 
-        const categoryMap: { [key: string]: number } = {};
-        categoryData.data?.forEach(item => {
-          categoryMap[item.category] = (categoryMap[item.category] || 0) + item.quantity;
-        });
+      const totalWaste = Object.values(categoryMap).reduce((sum, val) => sum + val, 0);
+      const categoryArray = Object.entries(categoryMap)
+        .map(([category, amount]) => ({
+          category,
+          percentage: totalWaste > 0 ? (amount / totalWaste) * 100 : 0,
+          amount: `${amount.toFixed(1)} kg`,
+          color: categoryColors[category] || 'bg-gray-400',
+        }))
+        .sort((a,b) => b.percentage - a.percentage);
+      
+      setWasteByCategory(categoryArray);
 
-        const totalWaste = Object.values(categoryMap).reduce((sum, val) => sum + val, 0);
-        const categoryArray = Object.entries(categoryMap)
-          .map(([category, amount]) => ({
-            category,
-            percentage: totalWaste > 0 ? (amount / totalWaste) * 100 : 0,
-            amount: `${amount.toFixed(1)} lbs`,
-            color: categoryColors[category] || 'bg-gray-400',
-          }))
-          .sort((a,b) => b.percentage - a.percentage);
-        
-        setWasteByCategory(categoryArray);
-
-      } catch (error) {
-        console.error("Error fetching analytics data", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAnalyticsData();
-  }, [user]);
+    } catch (error) {
+      console.error("Error generating analytics data", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   const categoryColors: { [key: string]: string } = {
     produce: 'bg-success-500',
@@ -72,7 +78,12 @@ const Analytics: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <motion.div 
+      className="space-y-6"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Analytics Dashboard</h1>
@@ -86,28 +97,36 @@ const Analytics: React.FC = () => {
           </select>
           <button className="btn-primary flex items-center gap-2">
             <Download className="h-4 w-4" />
-            Export Report
+            Download Report
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <motion.div 
+        className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {loading ? [...Array(4)].map((_, i) => (
           <div key={i} className="card h-36 animate-pulse bg-gray-100"></div>
-        )) : metrics.map((metric, index) => (
+        )) : metrics.map((metric) => (
           <motion.div
             key={metric.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
+            variants={itemVariants}
             className="card"
           >
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">{metric.title}</p>
-                <p className="text-2xl font-bold text-gray-900">{metric.value}</p>
+                <AnimatedNumber
+                  value={metric.value}
+                  prefix={metric.prefix}
+                  suffix={metric.suffix}
+                  className="text-2xl font-bold text-gray-900"
+                />
               </div>
-              <div className={`rounded-lg p-3 ${metric.color.replace('text-', 'bg-').replace('-500', '-100')}`}>
+              <div className={`flex items-center justify-center rounded-lg p-3 h-12 w-12 ${metric.color.replace('text-', 'bg-').replace('-500', '-100')}`}>
                 <metric.icon className={`h-6 w-6 ${metric.color}`} />
               </div>
             </div>
@@ -117,7 +136,7 @@ const Analytics: React.FC = () => {
             </div>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="card">
@@ -125,7 +144,7 @@ const Analytics: React.FC = () => {
           {loading ? <div className="h-64 animate-pulse bg-gray-100 rounded-lg"></div> :
             wasteByCategory.length > 0 ? (
               <div className="space-y-4">
-                {wasteByCategory.map((item) => (
+                {wasteByCategory.map((item, index) => (
                   <div key={item.category} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -138,9 +157,11 @@ const Analytics: React.FC = () => {
                       </div>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className={`h-2 rounded-full transition-all duration-500 ${item.color}`}
-                        style={{ width: `${item.percentage}%` }}
+                      <motion.div
+                        className={`h-2 rounded-full ${item.color}`}
+                        initial={{ width: 0 }}
+                        animate={{ width: `${item.percentage}%` }}
+                        transition={{ duration: 1, ease: 'easeOut', delay: index * 0.1 }}
                       />
                     </div>
                   </div>
@@ -166,7 +187,7 @@ const Analytics: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

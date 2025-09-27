@@ -1,72 +1,77 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { DollarSign, Trash2, Leaf, ShoppingCart, CheckCircle, BarChart3 } from 'lucide-react';
+import { Trash2, Leaf, ShoppingCart, CheckCircle, BarChart3 } from 'lucide-react';
 import StatCard from '../components/Dashboard/StatCard';
 import WasteChart from '../components/Dashboard/WasteChart';
 import RecentActivity from '../components/Dashboard/RecentActivity';
-import { useAuth } from '../context/AuthContext';
-import { supabase } from '../lib/supabaseClient';
+import { faker } from '@faker-js/faker';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+  },
+};
 
 const Dashboard: React.FC = () => {
-  const { user } = useAuth();
   const [stats, setStats] = useState([
-    { title: 'Total Savings', value: '$0', change: '+0%', trend: 'up' as const, icon: DollarSign, color: 'blue' as const },
-    { title: 'Waste Diverted', value: '0 lbs', change: '+0%', trend: 'up' as const, icon: Trash2, color: 'green' as const },
-    { title: 'CO2 Reduced', value: '0 lbs', change: '+0%', trend: 'up' as const, icon: Leaf, color: 'teal' as const },
-    { title: 'Active Listings', value: '0', change: '+0%', trend: 'up' as const, icon: ShoppingCart, color: 'purple' as const },
+    { title: 'Total Savings', value: 0, prefix: '₹', suffix: '', change: '+0%', trend: 'up' as const, icon: () => <span className="font-bold text-blue-600">₹</span>, color: 'blue' as const },
+    { title: 'Waste Diverted', value: 0, prefix: '', suffix: ' kg', change: '+0%', trend: 'up' as const, icon: Trash2, color: 'green' as const },
+    { title: 'CO2 Reduced', value: 0, prefix: '', suffix: ' kg', change: '+0%', trend: 'up' as const, icon: Leaf, color: 'teal' as const },
+    { title: 'Active Listings', value: 0, prefix: '', suffix: '', change: '+0%', trend: 'up' as const, icon: ShoppingCart, color: 'purple' as const },
   ]);
   const [wasteByCategory, setWasteByCategory] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      if (!user) return;
-      setLoading(true);
+    setLoading(true);
 
-      try {
-        const [savingsData, wasteData, listingsData, categoryData] = await Promise.all([
-          supabase.from('marketplace_listings').select('original_price, discounted_price'),
-          supabase.from('waste_logs').select('quantity'),
-          supabase.from('marketplace_listings').select('id', { count: 'exact' }),
-          supabase.from('waste_logs').select('category, quantity'),
-        ]);
+    try {
+      const totalSavings = faker.number.int({ min: 80000, max: 400000 });
+      const totalWasteDiverted = faker.number.float({ min: 50, max: 250, precision: 1 });
+      const co2Reduced = totalWasteDiverted * 2.5;
+      const activeListings = faker.number.int({ min: 10, max: 50 });
 
-        const totalSavings = savingsData.data?.reduce((acc, item) => acc + (item.original_price - item.discounted_price), 0) || 0;
-        const totalWasteDiverted = wasteData.data?.reduce((acc, item) => acc + item.quantity, 0) || 0;
-        const co2Reduced = totalWasteDiverted * 2.5;
-        const activeListings = listingsData.count || 0;
+      const categories = ['produce', 'dairy', 'bakery', 'meat', 'pantry', 'frozen'];
+      const categoryMap: { [key: string]: number } = {};
+      categories.forEach(cat => {
+        categoryMap[cat] = faker.number.int({ min: 10, max: 100 });
+      });
+      const totalWaste = Object.values(categoryMap).reduce((sum, val) => sum + val, 0);
+      const categoryArray = Object.entries(categoryMap)
+        .map(([category, amount]) => ({
+          category,
+          percentage: totalWaste > 0 ? (amount / totalWaste) * 100 : 0,
+          color: categoryColors[category] || 'bg-neutral-400',
+        }))
+        .sort((a,b) => b.percentage - a.percentage);
 
-        const categoryMap: { [key: string]: number } = {};
-        categoryData.data?.forEach(item => {
-          categoryMap[item.category] = (categoryMap[item.category] || 0) + item.quantity;
-        });
-        const totalWaste = Object.values(categoryMap).reduce((sum, val) => sum + val, 0);
-        const categoryArray = Object.entries(categoryMap)
-          .map(([category, amount]) => ({
-            category,
-            amount: `${totalWaste > 0 ? ((amount / totalWaste) * 100).toFixed(0) : 0}%`,
-            color: categoryColors[category] || 'bg-neutral-400',
-          }))
-          .sort((a,b) => parseFloat(b.amount) - parseFloat(a.amount));
+      setStats([
+        { title: 'Total Savings', value: totalSavings, prefix: '₹', suffix: '', change: `+${faker.number.float({ min: 1, max: 10, precision: 1 })}%`, trend: 'up' as const, icon: () => <span className="font-bold text-blue-600">₹</span>, color: 'blue' as const },
+        { title: 'Waste Diverted', value: totalWasteDiverted, prefix: '', suffix: ' kg', change: `+${faker.number.float({ min: 1, max: 10, precision: 1 })}%`, trend: 'up' as const, icon: Trash2, color: 'green' as const },
+        { title: 'CO2 Reduced', value: co2Reduced, prefix: '', suffix: ' kg', change: `+${faker.number.float({ min: 1, max: 10, precision: 1 })}%`, trend: 'up' as const, icon: Leaf, color: 'teal' as const },
+        { title: 'Active Listings', value: activeListings, prefix: '', suffix: '', change: `+${faker.number.int({ min: 1, max: 5 })}`, trend: 'up' as const, icon: ShoppingCart, color: 'purple' as const },
+      ]);
 
-        setStats([
-          { title: 'Total Savings', value: `$${totalSavings.toFixed(2)}`, change: '+0%', trend: 'up' as const, icon: DollarSign, color: 'blue' as const },
-          { title: 'Waste Diverted', value: `${totalWasteDiverted.toFixed(1)} lbs`, change: '+0%', trend: 'up' as const, icon: Trash2, color: 'green' as const },
-          { title: 'CO2 Reduced', value: `${co2Reduced.toFixed(1)} lbs`, change: '+0%', trend: 'up' as const, icon: Leaf, color: 'teal' as const },
-          { title: 'Active Listings', value: activeListings.toString(), change: '+0%', trend: 'up' as const, icon: ShoppingCart, color: 'purple' as const },
-        ]);
+      setWasteByCategory(categoryArray);
 
-        setWasteByCategory(categoryArray);
-
-      } catch (error) {
-        console.error("Error fetching dashboard data", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDashboardData();
-  }, [user]);
+    } catch (error) {
+      console.error("Error generating dashboard data", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   const categoryColors: { [key: string]: string } = {
     produce: 'bg-green-500',
@@ -78,7 +83,12 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <motion.div 
+      className="space-y-8"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-neutral-900">Dashboard</h1>
@@ -90,7 +100,12 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <motion.div 
+        className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {loading ? (
           [...Array(4)].map((_, index) => (
             <div key={index} className="card animate-pulse h-[138px]">
@@ -98,18 +113,13 @@ const Dashboard: React.FC = () => {
             </div>
           ))
         ) : (
-          stats.map((stat, index) => (
-            <motion.div
-              key={stat.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
+          stats.map((stat) => (
+            <motion.div key={stat.title} variants={itemVariants}>
               <StatCard {...stat} />
             </motion.div>
           ))
         )}
-      </div>
+      </motion.div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
         <div className="lg:col-span-3">
@@ -123,20 +133,30 @@ const Dashboard: React.FC = () => {
       <div className="card">
         <h3 className="mb-4 text-lg font-semibold text-neutral-900">Waste by Category</h3>
         {loading ? (
-            <div className="space-y-3 animate-pulse">
-              {[...Array(4)].map((_, i) => <div key={i} className="h-6 bg-neutral-200 rounded-md" />)}
-            </div>
+            <div className="h-10 animate-pulse bg-neutral-200 rounded-lg" />
         ) : wasteByCategory.length > 0 ? (
-          <div className="space-y-3">
-            {wasteByCategory.map((item) => (
-              <div key={item.category} className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className={`h-3 w-3 rounded-full ${item.color}`} />
-                  <span className="text-sm text-neutral-600 capitalize">{item.category}</span>
+          <div>
+            <div className="flex rounded-full overflow-hidden h-3 mb-4">
+              {wasteByCategory.map((item, index) => (
+                <motion.div
+                  key={item.category}
+                  className={`${item.color}`}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${item.percentage}%` }}
+                  transition={{ duration: 1, ease: 'easeOut', delay: index * 0.1 }}
+                  title={`${item.category}: ${item.percentage.toFixed(1)}%`}
+                />
+              ))}
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-2">
+              {wasteByCategory.map((item) => (
+                <div key={item.category} className="flex items-center gap-2 text-sm">
+                  <div className={`h-2.5 w-2.5 rounded-full ${item.color}`} />
+                  <span className="text-neutral-600 capitalize">{item.category}</span>
+                  <span className="font-medium text-neutral-800">{item.percentage.toFixed(1)}%</span>
                 </div>
-                <span className="text-sm font-medium text-neutral-900">{item.amount}</span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         ) : (
           <div className="text-center py-8">
@@ -146,7 +166,7 @@ const Dashboard: React.FC = () => {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

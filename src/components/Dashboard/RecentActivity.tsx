@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, Package, TrendingDown } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import { useAuth } from '../../context/AuthContext';
-import { supabase } from '../../lib/supabaseClient';
-import { WasteLog, InventoryItem } from '../../types/database';
+import { faker } from '@faker-js/faker';
 
 type Activity = {
   id: string;
@@ -16,70 +14,45 @@ type Activity = {
 };
 
 const RecentActivity: React.FC = () => {
-  const { user } = useAuth();
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchActivities = async () => {
-      if (!user) return;
-      setLoading(true);
-
-      try {
-        const [wasteLogs, inventoryItems] = await Promise.all([
-          supabase
-            .from('waste_logs')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .limit(3),
-          supabase
-            .from('inventory_items')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .limit(3),
-        ]);
-
-        const combinedActivities: Activity[] = [];
-
-        if (wasteLogs.data) {
-          wasteLogs.data.forEach((log: WasteLog) => {
-            combinedActivities.push({
-              id: `waste-${log.id}`,
-              type: 'waste_reduced',
-              message: `${log.quantity} ${log.unit} of ${log.item_name} logged as waste.`,
-              timestamp: new Date(log.created_at),
-              icon: TrendingDown,
-              iconBg: 'bg-red-100',
-              iconColor: 'text-red-600',
-            });
-          });
+    setLoading(true);
+    const activityTypes = [
+        {
+            type: 'waste_reduced' as const,
+            icon: TrendingDown,
+            iconBg: 'bg-red-100',
+            iconColor: 'text-red-600',
+            generateMessage: () => `${faker.number.int({min: 1, max: 20})} ${faker.helpers.arrayElement(['kg', 'grams', 'pieces'])} of ${faker.commerce.productName()} logged as waste.`
+        },
+        {
+            type: 'new_inventory' as const,
+            icon: Package,
+            iconBg: 'bg-blue-100',
+            iconColor: 'text-blue-600',
+            generateMessage: () => `Added ${faker.commerce.productName()} to inventory.`
         }
+    ];
 
-        if (inventoryItems.data) {
-          inventoryItems.data.forEach((item: InventoryItem) => {
-            combinedActivities.push({
-              id: `inventory-${item.id}`,
-              type: 'new_inventory',
-              message: `Added ${item.name} to inventory.`,
-              timestamp: new Date(item.created_at),
-              icon: Package,
-              iconBg: 'bg-blue-100',
-              iconColor: 'text-blue-600',
-            });
-          });
-        }
+    const generatedActivities: Activity[] = Array.from({ length: 5 }, () => {
+        const activityConfig = faker.helpers.arrayElement(activityTypes);
+        return {
+            id: faker.string.uuid(),
+            type: activityConfig.type,
+            message: activityConfig.generateMessage(),
+            timestamp: faker.date.recent({ days: 7 }),
+            icon: activityConfig.icon,
+            iconBg: activityConfig.iconBg,
+            iconColor: activityConfig.iconColor,
+        };
+    });
 
-        combinedActivities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
-        setActivities(combinedActivities.slice(0, 5));
-      } catch (error) {
-        console.error('Error fetching activities:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchActivities();
-  }, [user]);
+    generatedActivities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+    setActivities(generatedActivities);
+    setLoading(false);
+  }, []);
 
   if (loading) {
     return (

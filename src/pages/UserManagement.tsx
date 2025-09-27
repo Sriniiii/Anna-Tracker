@@ -2,9 +2,28 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Search, User, UserPlus, Edit, Trash2 } from 'lucide-react';
 import { useToast } from '../hooks/useToast';
 import Toast from '../components/UI/Toast';
-import { supabase } from '../lib/supabaseClient';
 import { Profile } from '../types/database';
 import { format } from 'date-fns';
+import { faker } from '@faker-js/faker';
+import { motion } from 'framer-motion';
+
+const tableContainerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+};
+
+const tableRowVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: {
+    opacity: 1,
+    x: 0,
+  },
+};
 
 const UserManagement: React.FC = () => {
   const { toast, showToast, hideToast } = useToast();
@@ -14,29 +33,25 @@ const UserManagement: React.FC = () => {
   const [roleFilter, setRoleFilter] = useState('all');
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('full_name', { ascending: true });
-
-      if (error) {
-        console.error('Error fetching users:', error);
-        showToast('error', 'Fetch Failed', 'Could not fetch user data.');
-      } else {
-        setUsers(data || []);
-      }
-      setLoading(false);
-    };
-
-    fetchUsers();
-  }, [showToast]);
+    setLoading(true);
+    const generatedUsers: Profile[] = Array.from({ length: 25 }, () => ({
+        id: faker.string.uuid(),
+        updated_at: faker.date.past().toISOString(),
+        username: faker.internet.username(),
+        full_name: faker.person.fullName(),
+        avatar_url: faker.image.avatar(),
+        website: faker.internet.url(),
+        role: faker.helpers.arrayElement(['admin', 'user']),
+        email: faker.internet.email(),
+    }));
+    setUsers(generatedUsers);
+    setLoading(false);
+  }, []);
 
   const filteredUsers = useMemo(() => {
     return users.filter(user => {
-      const matchesSearch = user.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           user.email?.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = (user.full_name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           (user.email || '').toLowerCase().includes(searchQuery.toLowerCase());
       const matchesRole = roleFilter === 'all' || user.role === roleFilter;
       return matchesSearch && matchesRole;
     });
@@ -59,7 +74,12 @@ const UserManagement: React.FC = () => {
 
   return (
     <>
-      <div className="space-y-6">
+      <motion.div 
+        className="space-y-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">User Management</h1>
@@ -117,9 +137,14 @@ const UserManagement: React.FC = () => {
                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <motion.tbody 
+                  className="bg-white divide-y divide-gray-200"
+                  variants={tableContainerVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
                   {filteredUsers.map((user) => (
-                    <tr key={user.id}>
+                    <motion.tr key={user.id} variants={tableRowVariants}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-3">
                           <img className="h-10 w-10 rounded-full" src={user.avatar_url || `https://ui-avatars.com/api/?name=${user.full_name || user.email}&background=random`} alt={user.full_name || ''} />
@@ -135,14 +160,14 @@ const UserManagement: React.FC = () => {
                         <button onClick={() => handleAction('Edit', user.full_name)} className="text-primary-600 hover:text-primary-900 mr-4"><Edit className="h-4 w-4" /></button>
                         <button onClick={() => handleAction('Delete', user.full_name)} className="text-red-600 hover:text-red-900"><Trash2 className="h-4 w-4" /></button>
                       </td>
-                    </tr>
+                    </motion.tr>
                   ))}
-                </tbody>
+                </motion.tbody>
               </table>
             </div>
           )}
         </div>
-      </div>
+      </motion.div>
       <Toast {...toast} onClose={hideToast} />
     </>
   );

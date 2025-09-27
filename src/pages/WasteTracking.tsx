@@ -1,37 +1,68 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Plus, Trash2, Edit } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { supabase } from '../lib/supabaseClient';
 import { WasteLog, Profile } from '../types/database';
 import LogWasteModal from '../components/Modals/LogWasteModal';
 import { useToast } from '../hooks/useToast';
 import Toast from '../components/UI/Toast';
 import { format } from 'date-fns';
+import { faker } from '@faker-js/faker';
+import { motion } from 'framer-motion';
 
 type WasteLogWithProfile = WasteLog & { profiles: Profile | null };
 
+const tableContainerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+};
+
+const tableRowVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: {
+    opacity: 1,
+    x: 0,
+  },
+};
+
 const WasteTracking: React.FC = () => {
-  const { user, profile } = useAuth();
+  const { profile } = useAuth();
   const [wasteLogs, setWasteLogs] = useState<WasteLogWithProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { toast, showToast, hideToast } = useToast();
 
-  const fetchWasteLogs = useCallback(async () => {
-    if (!user) return;
+  const fetchWasteLogs = useCallback(() => {
     setLoading(true);
-    let query = supabase.from('waste_logs').select('*, profiles (full_name, email)');
-
-    const { data, error } = await query.order('waste_date', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching waste logs:', error);
-      showToast('error', 'Fetch Failed', 'Could not fetch waste logs.');
-    } else {
-      setWasteLogs(data as any);
-    }
+    const logs: WasteLogWithProfile[] = Array.from({ length: 20 }, () => ({
+        id: faker.number.int(),
+        created_at: faker.date.recent().toISOString(),
+        user_id: faker.string.uuid(),
+        item_name: faker.commerce.productName(),
+        category: faker.helpers.arrayElement(['produce', 'dairy', 'bakery', 'meat', 'pantry', 'frozen']),
+        quantity: faker.number.int({ min: 1, max: 20 }),
+        unit: faker.helpers.arrayElement(['kg', 'grams', 'pieces']),
+        reason: faker.helpers.arrayElement(['expired', 'spoiled', 'overordered', 'damaged']),
+        waste_date: faker.date.recent({ days: 30 }).toISOString(),
+        notes: faker.lorem.sentence(),
+        profiles: {
+            id: faker.string.uuid(),
+            updated_at: faker.date.past().toISOString(),
+            username: faker.internet.username(),
+            full_name: faker.person.fullName(),
+            avatar_url: faker.image.avatar(),
+            website: faker.internet.url(),
+            role: 'user',
+            email: faker.internet.email(),
+        }
+    }));
+    setWasteLogs(logs);
     setLoading(false);
-  }, [user, showToast]);
+  }, []);
 
   useEffect(() => {
     fetchWasteLogs();
@@ -42,22 +73,20 @@ const WasteTracking: React.FC = () => {
     fetchWasteLogs();
   };
 
-  const handleDelete = async (logId: number) => {
+  const handleDelete = (logId: number) => {
     if (!window.confirm('Are you sure you want to delete this log?')) return;
-
-    const { error } = await supabase.from('waste_logs').delete().eq('id', logId);
-
-    if (error) {
-      showToast('error', 'Delete Failed', error.message);
-    } else {
-      showToast('success', 'Log Deleted', 'The waste log has been removed.');
-      fetchWasteLogs();
-    }
+    setWasteLogs(prev => prev.filter(log => log.id !== logId));
+    showToast('success', 'Log Deleted', 'The waste log has been removed.');
   };
 
   return (
     <>
-      <div className="space-y-6">
+      <motion.div 
+        className="space-y-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Waste Tracking</h1>
@@ -98,9 +127,14 @@ const WasteTracking: React.FC = () => {
                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <motion.tbody 
+                  className="bg-white divide-y divide-gray-200"
+                  variants={tableContainerVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
                   {wasteLogs.map((log) => (
-                    <tr key={log.id}>
+                    <motion.tr key={log.id} variants={tableRowVariants}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{log.item_name}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">{log.category}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{log.quantity} {log.unit}</td>
@@ -111,14 +145,14 @@ const WasteTracking: React.FC = () => {
                         <button className="text-primary-600 hover:text-primary-900 mr-4"><Edit className="h-4 w-4" /></button>
                         <button onClick={() => handleDelete(log.id)} className="text-red-600 hover:text-red-900"><Trash2 className="h-4 w-4" /></button>
                       </td>
-                    </tr>
+                    </motion.tr>
                   ))}
-                </tbody>
+                </motion.tbody>
               </table>
             </div>
           )}
         </div>
-      </div>
+      </motion.div>
 
       <LogWasteModal
         isOpen={isModalOpen}

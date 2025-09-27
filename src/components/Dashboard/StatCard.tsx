@@ -1,12 +1,16 @@
 import React from 'react';
 import { TrendingUp, TrendingDown, type LucideIcon } from 'lucide-react';
+import { motion } from 'framer-motion';
+import AnimatedNumber from '../UI/AnimatedNumber';
 
 interface StatCardProps {
   title: string;
-  value: string;
+  value: number;
+  prefix?: string;
+  suffix?: string;
   change: string;
   trend: 'up' | 'down';
-  icon: LucideIcon;
+  icon: LucideIcon | React.FC<any>;
   color: 'blue' | 'purple' | 'teal' | 'green' | 'yellow' | 'red';
 }
 
@@ -19,32 +23,40 @@ const colorClasses = {
   red: { bg: 'bg-red-100', text: 'text-red-600' },
 };
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, change, trend, icon: Icon, color }) => {
+const StatCard: React.FC<StatCardProps> = ({ title, value, prefix, suffix, change, trend, icon: Icon, color }) => {
   const { bg, text } = colorClasses[color];
 
   return (
-    <div className="card">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-neutral-600">{title}</p>
-          <p className="text-2xl font-bold text-neutral-900">{value}</p>
-        </div>
-        <div className={`rounded-md p-3 ${bg}`}>
+    <motion.div 
+      className="card"
+      whileHover={{ y: -5, boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)' }}
+      transition={{ type: 'spring', stiffness: 300 }}
+    >
+      <div className="flex items-start justify-between">
+        <div className={`rounded-lg p-3 ${bg}`}>
           <Icon className={`h-6 w-6 ${text}`} />
         </div>
+        <div className="flex items-center gap-1">
+          {trend === 'up' ? (
+            <TrendingUp className="h-4 w-4 text-success-500" />
+          ) : (
+            <TrendingDown className="h-4 w-4 text-error-500" />
+          )}
+          <span className={`text-sm font-medium ${trend === 'up' ? 'text-success-600' : 'text-error-600'}`}>
+            {change}
+          </span>
+        </div>
       </div>
-      <div className="mt-4 flex items-center gap-2">
-        {trend === 'up' ? (
-          <TrendingUp className="h-4 w-4 text-success-500" />
-        ) : (
-          <TrendingDown className="h-4 w-4 text-error-500" />
-        )}
-        <span className={`text-sm font-medium ${trend === 'up' ? 'text-success-600' : 'text-error-600'}`}>
-          {change}
-        </span>
-        <span className="text-sm text-neutral-500">from last month</span>
+      <div className="mt-4">
+        <p className="text-sm font-medium text-neutral-600">{title}</p>
+        <AnimatedNumber 
+          value={value}
+          prefix={prefix}
+          suffix={suffix}
+          className="text-2xl font-bold text-neutral-900"
+        />
       </div>
-    </div>
+    </motion.div>
   );
 };
 

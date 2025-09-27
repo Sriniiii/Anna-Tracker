@@ -132,10 +132,9 @@ const LogWasteModal: React.FC<LogWasteModalProps> = ({ isOpen, onClose, onSucces
               required
             >
               <option value="">Select unit</option>
-              <option value="lbs">Pounds (lbs)</option>
               <option value="kg">Kilograms (kg)</option>
+              <option value="grams">Grams (g)</option>
               <option value="pieces">Pieces</option>
-              <option value="gallons">Gallons</option>
               <option value="liters">Liters</option>
               <option value="boxes">Boxes</option>
             </select>
